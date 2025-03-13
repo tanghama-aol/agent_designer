@@ -1,0 +1,31 @@
+.sider-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sider-header {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tree-container {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.tree-node-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.node-action-btn {
+  visibility: hidden;
+}
+
+.tree-node-title:hover .node-action-btn {
+  visibility: visible;
+} 

@@ -1,0 +1,80 @@
+.agent-designer {
+  width: 100%;
+  height: 100%;
+}
+
+.workflow-designer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.node-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.node-editor {
+  width: 300px;
+}
+
+.workflow-canvas {
+  flex: 1;
+  height: 600px;
+  background: #f9f9f9;
+}
+
+.custom-node {
+  padding: 10px;
+  border-radius: 5px;
+  width: 200px;
+  font-size: 12px;
+  color: #222;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.start-node {
+  background-color: #d4f7d4;
+  border-color: #4caf50;
+}
+
+.end-node {
+  background-color: #ffecec;
+  border-color: #f44336;
+}
+
+.lpi-node {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+}
+
+.agent-node {
+  background-color: #fff8e1;
+  border-color: #ffc107;
+}
+
+.common-node {
+  background-color: #f3e5f5;
+  border-color: #9c27b0;
+}
+
+.node-header {
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.node-content {
+  font-size: 10px;
+  text-align: left;
+  word-break: break-word;
+} 
