@@ -5,7 +5,7 @@ from models import db
 from controllers.component_controller import component_bp
 from controllers.workflow_controller import workflow_bp
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.config.from_object(Config)
 CORS(app)
 db.init_app(app)
