@@ -1,0 +1,20 @@
+.lpi-designer {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.lpi-designer .ant-card {
+  margin-bottom: 20px;
+}
+
+.lpi-designer .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.lpi-designer h3 {
+  margin: 24px 0 16px;
+  font-weight: 500;
+  color: #1f1f1f;
+} 

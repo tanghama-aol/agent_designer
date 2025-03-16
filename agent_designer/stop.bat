@@ -1,0 +1,6 @@
+@echo off
+echo Stopping frontend...
+taskkill /im node.exe /f
+
+echo Stopping backend...
+taskkill /im python.exe /f
