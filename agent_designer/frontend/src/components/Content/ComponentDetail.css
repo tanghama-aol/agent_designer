@@ -1,0 +1,77 @@
+.component-detail {
+  height: 100%;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 4px;
+  overflow-y: auto;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.detail-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.detail-section {
+  margin-bottom: 24px;
+}
+
+.detail-section-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+.param-list {
+  margin-bottom: 16px;
+}
+
+.param-item {
+  display: flex;
+  margin-bottom: 8px;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.param-name {
+  width: 120px;
+  font-weight: bold;
+}
+
+.param-type {
+  width: 100px;
+  color: #666;
+}
+
+.param-desc {
+  flex: 1;
+}
+
+.workflow-editor {
+  height: 500px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  margin-top: 16px;
+  position: relative;
+}
+
+.workflow-node-form {
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+} 

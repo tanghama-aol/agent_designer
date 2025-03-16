@@ -1,7 +1,10 @@
 from flask import Blueprint, request, jsonify
 from models import db
 from models.workflow import Workflow
-from services.workflow_service import test_workflow
+from services.workflow_service import (
+    get_workflow_detail, create_workflow, update_workflow, 
+    delete_workflow, execute_workflow, test_workflow
+)
 
 workflow_bp = Blueprint('workflow', __name__)
 
@@ -19,64 +22,28 @@ def list_workflows():
 
 @workflow_bp.route('/<int:workflow_id>', methods=['GET'])
 def get_workflow(workflow_id):
-    workflow = Workflow.query.get_or_404(workflow_id)
-    return jsonify(workflow.to_dict())
+    workflow_detail = get_workflow_detail(workflow_id)
+    return jsonify(workflow_detail)
 
 @workflow_bp.route('/', methods=['POST'])
-def create_workflow():
+def create_workflow_route():
     data = request.json
-    workflow = Workflow(
-        name=data.get('name'),
-        description=data.get('description'),
-        agent_id=data.get('agent_id')
-    )
-    
-    if 'nodes' in data:
-        workflow.nodes_obj = data['nodes']
-    
-    if 'edges' in data:
-        workflow.edges_obj = data['edges']
-    
-    db.session.add(workflow)
-    db.session.commit()
-    
+    workflow = create_workflow(data)
     return jsonify(workflow.to_dict()), 201
 
 @workflow_bp.route('/<int:workflow_id>', methods=['PUT'])
-def update_workflow(workflow_id):
-    workflow = Workflow.query.get_or_404(workflow_id)
+def update_workflow_route(workflow_id):
     data = request.json
-    
-    if 'name' in data:
-        workflow.name = data['name']
-    
-    if 'description' in data:
-        workflow.description = data['description']
-    
-    if 'agent_id' in data:
-        workflow.agent_id = data['agent_id']
-    
-    if 'nodes' in data:
-        workflow.nodes_obj = data['nodes']
-    
-    if 'edges' in data:
-        workflow.edges_obj = data['edges']
-    
-    db.session.commit()
-    
+    workflow = update_workflow(workflow_id, data)
     return jsonify(workflow.to_dict())
 
 @workflow_bp.route('/<int:workflow_id>', methods=['DELETE'])
-def delete_workflow(workflow_id):
-    workflow = Workflow.query.get_or_404(workflow_id)
-    db.session.delete(workflow)
-    db.session.commit()
-    
+def delete_workflow_route(workflow_id):
+    delete_workflow(workflow_id)
     return '', 204
 
 @workflow_bp.route('/<int:workflow_id>/test', methods=['POST'])
 def test_workflow_endpoint(workflow_id):
-    workflow = Workflow.query.get_or_404(workflow_id)
     input_data = request.json
     
     try:
@@ -87,5 +54,35 @@ def test_workflow_endpoint(workflow_id):
             'success': False,
             'error': str(e)
         }), 500
+
+@workflow_bp.route('/<int:workflow_id>/execute', methods=['POST'])
+def execute_workflow_endpoint(workflow_id):
+    input_data = request.json
+    
+    try:
+        result = execute_workflow(workflow_id, input_data)
+        return jsonify({
+            'success': True,
+            'result': result
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@workflow_bp.route('/<int:workflow_id>/publish', methods=['POST'])
+def publish_workflow(workflow_id):
+    workflow = Workflow.query.get_or_404(workflow_id)
+    workflow.status = 'published'
+    
+    # 更新版本号
+    version_parts = workflow.version.split('.')
+    version_parts[-1] = str(int(version_parts[-1]) + 1)
+    workflow.version = '.'.join(version_parts)
+    
+    db.session.commit()
+    
+    return jsonify(workflow.to_dict())
 
 

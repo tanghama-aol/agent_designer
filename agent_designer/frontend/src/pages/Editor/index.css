@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  background: #fff;
+  padding: 0 24px;
+  background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   z-index: 1;
 }
@@ -19,21 +19,168 @@
 }
 
 .editor-sider {
-  background: #fff;
-  border-right: 1px solid #f0f0f0;
+  background-color: #f5f5f5;
+  border-right: 1px solid #e8e8e8;
 }
 
 .editor-content {
-  padding: 20px;
-  background: #f5f5f5;
+  padding: 0;
+  background-color: #f0f2f5;
   overflow: auto;
 }
 
 .editor-footer {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 16px;
-  padding: 10px 20px;
-  background: #fff;
-  border-top: 1px solid #f0f0f0;
+  padding: 12px 24px;
+  background-color: #fff;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.workflow-tools {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.component-search {
+  margin-bottom: 16px;
+}
+
+.workflow-editor {
+  height: 600px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.workflow-node {
+  padding: 10px;
+  border-radius: 4px;
+  width: 150px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.node-header {
+  font-weight: bold;
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.node-content {
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.node-category {
+  font-size: 10px;
+  margin-top: 4px;
+  color: #666;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.start-node {
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+}
+
+.end-node {
+  background-color: #f6ffed;
+  border: 1px solid #b7eb8f;
+}
+
+.lpi-node {
+  background-color: #fff7e6;
+  border: 1px solid #ffd591;
+}
+
+.agent-node {
+  background-color: #f9f0ff;
+  border: 1px solid #d3adf7;
+}
+
+.common-node {
+  background-color: #f5f5f5;
+  border: 1px solid #d9d9d9;
+}
+
+/* LPI节点类型样式 */
+.lpi-node.general {
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+}
+
+.lpi-node.user-interaction {
+  background-color: #fff2e8;
+  border: 1px solid #ffbb96;
+}
+
+.lpi-node.async-wait {
+  background-color: #fcffe6;
+  border: 1px solid #eaff8f;
+}
+
+.lpi-node.memory-query {
+  background-color: #f9f0ff;
+  border: 1px solid #d3adf7;
+}
+
+.lpi-node.memory-modify {
+  background-color: #e6fffb;
+  border: 1px solid #87e8de;
+}
+
+.lpi-node.conditional-jump {
+  background-color: #fff0f6;
+  border: 1px solid #ffadd2;
+}
+
+.lpi-node.unconditional-jump {
+  background-color: #f4ffb8;
+  border: 1px solid #d3f261;
+}
+
+.lpi-node.business {
+  background-color: #fff7e6;
+  border: 1px solid #ffd591;
+}
+
+.selected-node-info {
+  width: 200px;
+}
+
+.react-flow__node.selected .workflow-node {
+  box-shadow: 0 0 0 2px #1890ff;
+}
+
+.react-flow__edge-path {
+  stroke: #999;
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #1890ff;
+  stroke-width: 3;
+}
+
+.react-flow__controls {
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+.react-flow__minimap {
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
 } 

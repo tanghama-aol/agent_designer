@@ -1,14 +1,31 @@
+import React from 'react';
+import { Layout, ConfigProvider, theme } from 'antd';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import EditorPage from './pages/Editor';
+import zhCN from 'antd/locale/zh_CN';
 import './App.css';
+import EditorPage from './pages/Editor';
+
+const { Header, Content, Footer } = Layout;
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<EditorPage />} />
-      </Routes>
-    </Router>
+    <ConfigProvider
+      locale={zhCN}
+      theme={{
+        algorithm: theme.defaultAlgorithm,
+        token: {
+          colorPrimary: '#1890ff',
+        },
+      }}
+    >
+      <Router>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Routes>
+            <Route path="/" element={<EditorPage />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ConfigProvider>
   );
 }
 

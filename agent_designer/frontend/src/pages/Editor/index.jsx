@@ -1,117 +1,163 @@
-import React, { useState } from 'react';
-import { Layout, Button, Modal, Form, Input, Select, message } from 'antd';
-import { SaveOutlined, PlayCircleOutlined, StopOutlined, EyeOutlined, CloudUploadOutlined, CloudDownloadOutlined, DeleteOutlined, SettingOutlined } from '@ant-design/icons';
-import EditorSider from '../../components/Sider';
-import EditorContent from '../../components/Content';
+import React, { useState, useEffect } from 'react';
+import { Layout, Button, message, Modal } from 'antd';
+import { SaveOutlined, PlayCircleOutlined, StopOutlined, SettingOutlined } from '@ant-design/icons';
+import ComponentSider from '../../components/Sider/ComponentSider';
+import ComponentDetail from '../../components/Content/ComponentDetail';
+import SettingsModal from '../../components/Settings/SettingsModal';
+import { getComponentTree } from '../../services/componentService';
 import './index.css';
 
 const { Header, Sider, Content, Footer } = Layout;
 
 const EditorPage = () => {
+  const [componentTree, setComponentTree] = useState([]);
+  const [selectedComponent, setSelectedComponent] = useState(null);
   const [settingsVisible, setSettingsVisible] = useState(false);
-  const [currentComponent, setCurrentComponent] = useState(null);
-  
-  const saveComponent = () => {
-    message.success('组件已保存');
-  };
-  
-  const previewComponent = () => {
-    message.info('预览功能开发中');
+  const [loading, setLoading] = useState(false);
+  const [draggedComponent, setDraggedComponent] = useState(null);
+
+  useEffect(() => {
+    fetchComponentTree();
+  }, []);
+
+  const fetchComponentTree = async () => {
+    try {
+      setLoading(true);
+      const data = await getComponentTree();
+      
+      // 修改树结构，将LPI分为通用LPI和业务LPI
+      const modifiedTree = data.map(node => {
+        if (node.key === 'lpi') {
+          // 找到所有LPI组件
+          const lpiChildren = node.children || [];
+          
+          // 分类LPI组件
+          const generalLpiNodes = lpiChildren.filter(child => 
+            ['general', 'user_interaction', 'async_wait', 'memory_query', 
+             'memory_modify', 'conditional_jump', 'unconditional_jump'].includes(child.category)
+          );
+          
+          const businessLpiNodes = lpiChildren.filter(child => 
+            child.category === 'business' || !['general', 'user_interaction', 'async_wait', 
+            'memory_query', 'memory_modify', 'conditional_jump', 'unconditional_jump'].includes(child.category)
+          );
+          
+          // 创建新的子节点
+          return {
+            ...node,
+            children: [
+              {
+                title: '通用LPI',
+                key: 'general_lpi',
+                children: generalLpiNodes
+              },
+              {
+                title: '业务LPI',
+                key: 'business_lpi',
+                children: businessLpiNodes
+              }
+            ]
+          };
+        }
+        return node;
+      });
+      
+      setComponentTree(modifiedTree);
+    } catch (error) {
+      message.error('获取组件树失败');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const publishComponent = () => {
-    message.success('组件已发布');
+  const handleComponentSelect = (selectedKeys, info) => {
+    if (info.node.id) {
+      setSelectedComponent({
+        id: info.node.id,
+        type: info.node.type
+      });
+    }
   };
 
-  const deleteComponent = () => {
-    Modal.confirm({
-      title: '确认删除',
-      content: '确定要删除此组件吗？此操作不可撤销。',
-      onOk() {
-        message.success('组件已删除');
-      }
+  const handleSave = () => {
+    message.success('保存成功');
+  };
+
+  const handleRun = () => {
+    message.info('开始运行');
+  };
+
+  const handleStop = () => {
+    message.info('已停止');
+  };
+
+  const handleSettingsClick = () => {
+    setSettingsVisible(true);
+  };
+
+  const handleSettingsClose = () => {
+    setSettingsVisible(false);
+  };
+
+  const handleDragComponent = (component) => {
+    setDraggedComponent(component);
+    
+    // 创建自定义事件，通知工作流编辑器
+    const dragEvent = new CustomEvent('component-drag', { 
+      detail: { component } 
     });
+    document.dispatchEvent(dragEvent);
   };
 
   return (
-    <Layout style={{ height: '100vh' }}>
+    <Layout>
       <Header className="editor-header">
-        <div className="logo">Agent设计器</div>
+        <div className="logo">Agent编辑器</div>
         <div className="header-actions">
-          <Button icon={<SaveOutlined />} type="primary" onClick={saveComponent}>保存</Button>
-          <Button icon={<EyeOutlined />} onClick={previewComponent}>预览</Button>
-          <Button icon={<CloudUploadOutlined />} onClick={publishComponent}>发布</Button>
-          <Button icon={<DeleteOutlined />} danger onClick={deleteComponent}>删除</Button>
-          <Button icon={<CloudDownloadOutlined />}>导入</Button>
-          <Button icon={<CloudUploadOutlined />}>导出</Button>
-          <Button icon={<SettingOutlined />} onClick={() => setSettingsVisible(true)}>配置</Button>
+          <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
+            保存
+          </Button>
+          <Button type="default" icon={<SettingOutlined />} onClick={handleSettingsClick}>
+            配置
+          </Button>
         </div>
       </Header>
       <Layout>
         <Sider width={250} className="editor-sider">
-          <EditorSider onSelectComponent={setCurrentComponent} />
+          <ComponentSider 
+            componentTree={componentTree} 
+            onSelect={handleComponentSelect}
+            loading={loading}
+            onRefresh={fetchComponentTree}
+            onDragComponent={handleDragComponent}
+          />
         </Sider>
         <Content className="editor-content">
-          <EditorContent component={currentComponent} />
+          <ComponentDetail 
+            componentInfo={selectedComponent}
+            onRefreshTree={fetchComponentTree}
+            draggedComponent={draggedComponent}
+          />
         </Content>
       </Layout>
       <Footer className="editor-footer">
-        <Button icon={<SaveOutlined />} type="primary">保存</Button>
-        <Button icon={<PlayCircleOutlined />} type="primary">运行</Button>
-        <Button icon={<StopOutlined />} danger>停止</Button>
+        <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
+          保存
+        </Button>
+        <Button type="primary" icon={<PlayCircleOutlined />} onClick={handleRun}>
+          运行
+        </Button>
+        <Button danger icon={<StopOutlined />} onClick={handleStop}>
+          停止
+        </Button>
       </Footer>
-      
-      <SettingsModal visible={settingsVisible} onClose={() => setSettingsVisible(false)} />
-    </Layout>
-  );
-};
 
-const SettingsModal = ({ visible, onClose }) => {
-  const [form] = Form.useForm();
-  
-  const handleSave = () => {
-    form.validateFields().then(values => {
-      message.success('配置已保存');
-      onClose();
-    });
-  };
-  
-  return (
-    <Modal
-      title="系统配置"
-      visible={visible}
-      onCancel={onClose}
-      onOk={handleSave}
-      width={600}
-    >
-      <Form form={form} layout="vertical">
-        <h3>大模型配置</h3>
-        <Form.Item name="modelName" label="大模型名称" rules={[{ required: true }]}>
-          <Input placeholder="请输入大模型名称" />
-        </Form.Item>
-        <Form.Item name="modelType" label="大模型类型" rules={[{ required: true }]}>
-          <Select placeholder="请选择大模型类型">
-            <Select.Option value="openai">OpenAI</Select.Option>
-            <Select.Option value="azureopenai">Azure OpenAI</Select.Option>
-            <Select.Option value="claude">Claude</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="apiKey" label="API Key" rules={[{ required: true }]}>
-          <Input.Password placeholder="请输入API Key" />
-        </Form.Item>
-        <Form.Item name="apiBaseUrl" label="API Base URL">
-          <Input placeholder="请输入API Base URL" />
-        </Form.Item>
-        <Form.Item name="deploymentName" label="部署名称/模型名称">
-          <Input placeholder="请输入部署名称或模型名称" />
-        </Form.Item>
-        
-        <h3>存储配置</h3>
-        <Form.Item name="storageDir" label="存储目录">
-          <Input placeholder="请输入存储目录路径" />
-        </Form.Item>
-      </Form>
-    </Modal>
+      <SettingsModal 
+        visible={settingsVisible}
+        onClose={handleSettingsClose}
+      />
+    </Layout>
   );
 };
 

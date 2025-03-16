@@ -1,7 +1,13 @@
 from flask import Blueprint, request, jsonify
 from models import db
 from models.component import Component
-from services.component_service import get_component_tree, get_component_detail
+from services.component_service import (
+    get_component_tree, get_component_detail, 
+    create_lpi, update_lpi, 
+    create_agent, update_agent,
+    create_common_component, update_common_component,
+    delete_component
+)
 
 component_bp = Blueprint('component', __name__)
 
@@ -28,70 +34,73 @@ def get_tree():
 
 @component_bp.route('/<int:component_id>', methods=['GET'])
 def get_component(component_id):
-    component = Component.query.get_or_404(component_id)
-    return jsonify(component.to_dict())
+    detail = get_component_detail(component_id)
+    return jsonify(detail)
 
-@component_bp.route('/', methods=['POST'])
-def create_component():
+@component_bp.route('/lpi', methods=['POST'])
+def create_lpi_component():
     data = request.json
-    component = Component(
-        name=data.get('name'),
-        description=data.get('description'),
-        english_description=data.get('english_description'),
-        component_type=data.get('component_type'),
-        category=data.get('category')
-    )
-    
-    if 'content' in data:
-        component.content_obj = data['content']
-    
-    db.session.add(component)
-    db.session.commit()
-    
-    return jsonify(component.to_dict()), 201
+    lpi = create_lpi(data)
+    return jsonify(lpi.get_lpi_details()), 201
 
-@component_bp.route('/<int:component_id>', methods=['PUT'])
-def update_component(component_id):
-    component = Component.query.get_or_404(component_id)
+@component_bp.route('/lpi/<int:component_id>', methods=['PUT'])
+def update_lpi_component(component_id):
     data = request.json
-    
-    if 'name' in data:
-        component.name = data['name']
-    
-    if 'description' in data:
-        component.description = data['description']
-    
-    if 'english_description' in data:
-        component.english_description = data['english_description']
-    
-    if 'component_type' in data:
-        component.component_type = data['component_type']
-    
-    if 'category' in data:
-        component.category = data['category']
-    
-    if 'content' in data:
-        component.content_obj = data['content']
-    
-    db.session.commit()
-    
-    return jsonify(component.to_dict())
+    lpi = update_lpi(component_id, data)
+    return jsonify(lpi.get_lpi_details())
+
+@component_bp.route('/agent', methods=['POST'])
+def create_agent_component():
+    data = request.json
+    agent = create_agent(data)
+    return jsonify(agent.get_agent_details()), 201
+
+@component_bp.route('/agent/<int:component_id>', methods=['PUT'])
+def update_agent_component(component_id):
+    data = request.json
+    agent = update_agent(component_id, data)
+    return jsonify(agent.get_agent_details())
+
+@component_bp.route('/common', methods=['POST'])
+def create_common_component_route():
+    data = request.json
+    component = create_common_component(data)
+    return jsonify(component.get_common_details()), 201
+
+@component_bp.route('/common/<int:component_id>', methods=['PUT'])
+def update_common_component_route(component_id):
+    data = request.json
+    component = update_common_component(component_id, data)
+    return jsonify(component.get_common_details())
 
 @component_bp.route('/<int:component_id>', methods=['DELETE'])
-def delete_component(component_id):
-    component = Component.query.get_or_404(component_id)
-    db.session.delete(component)
-    db.session.commit()
-    
+def delete_component_route(component_id):
+    delete_component(component_id)
     return '', 204
 
 @component_bp.route('/import', methods=['POST'])
 def import_component():
-    # 导入组件的逻辑
-    return jsonify({'message': '组件导入成功'})
+    data = request.json
+    component_type = data.get('component_type')
+    
+    if component_type == 'lpi':
+        component = create_lpi(data)
+    elif component_type == 'agent':
+        component = create_agent(data)
+    elif component_type == 'common':
+        component = create_common_component(data)
+    else:
+        return jsonify({'error': '不支持的组件类型'}), 400
+    
+    return jsonify(component.to_dict()), 201
 
 @component_bp.route('/<int:component_id>/export', methods=['GET'])
 def export_component(component_id):
-    # 导出组件的逻辑
     component = Component.query.get_or_404(component_id)
-    return jsonify(component.to_dict()) 
+    export_data = component.to_dict()
+    
+    # 如果是Agent，添加工作流信息
+    if component.component_type == 'agent':
+        export_data['workflows'] = [w.to_dict() for w in component.workflows]
+    
+    return jsonify(export_data) 

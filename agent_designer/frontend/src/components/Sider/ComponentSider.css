@@ -1,0 +1,107 @@
+.component-sider {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px;
+}
+
+.sider-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.sider-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.empty-tree {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #999;
+}
+
+/* 树节点样式 */
+.tree-node-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-right: 5px;
+}
+
+.node-title-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.node-actions {
+  display: none;
+  white-space: nowrap;
+}
+
+.tree-node-title:hover .node-actions {
+  display: flex;
+}
+
+/* 拖拽样式 */
+.drag-handle {
+  cursor: move;
+}
+
+/* 拖拽时的样式 */
+.ant-tree-node-content-wrapper.dragging {
+  background-color: #e6f7ff;
+  border: 1px dashed #1890ff;
+}
+
+/* 组件类型标识 */
+.component-type-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.lpi-indicator {
+  background-color: #faad14;
+}
+
+.general-lpi-indicator {
+  background-color: #52c41a;
+}
+
+.business-lpi-indicator {
+  background-color: #faad14;
+}
+
+.agent-indicator {
+  background-color: #1890ff;
+}
+
+.common-indicator {
+  background-color: #722ed1;
+}
+
+/* 拖拽预览 */
+.component-drag-preview {
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+} 
