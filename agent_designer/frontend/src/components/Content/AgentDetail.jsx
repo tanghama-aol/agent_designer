@@ -157,7 +157,13 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
 
   // 连接工作流节点
   const onConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
+    (connection) => {
+      if (!connection.sourceHandle || !connection.targetHandle) {
+        console.error("Invalid connection: missing source or target handle");
+        return;
+      }
+      setEdges((eds) => addEdge({ ...connection, id: `edge_${Date.now()}` }, eds));
+    },
     []
   );
 
