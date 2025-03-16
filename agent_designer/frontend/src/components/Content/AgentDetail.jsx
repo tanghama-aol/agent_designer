@@ -33,6 +33,7 @@ function StartNode({ data }) {
     <div className="workflow-node start-node">
       <div className="node-header">开始</div>
       <div className="node-content">{data?.name || '开始节点'}</div>
+      <div className="react-flow__handle react-flow__handle-bottom" style={{ bottom: -8 }} data-handle-id="source" data-nodeid={data.id} />
     </div>
   );
 }
@@ -43,6 +44,7 @@ function EndNode({ data }) {
     <div className="workflow-node end-node">
       <div className="node-header">结束</div>
       <div className="node-content">{data?.name || '结束节点'}</div>
+      <div className="react-flow__handle react-flow__handle-top" style={{ top: -8 }} data-handle-id="target" data-nodeid={data.id} />
     </div>
   );
 }
@@ -56,6 +58,8 @@ function LPINode({ data }) {
       {data?.lpiCategory && (
         <div className="node-category">{data.lpiCategory}</div>
       )}
+      <div className="react-flow__handle react-flow__handle-top" style={{ top: -8 }} data-handle-id="target" data-nodeid={data.id} />
+      <div className="react-flow__handle react-flow__handle-bottom" style={{ bottom: -8 }} data-handle-id="source" data-nodeid={data.id} />
     </div>
   );
 }
@@ -66,6 +70,8 @@ function AgentNode({ data }) {
     <div className="workflow-node agent-node">
       <div className="node-header">Agent</div>
       <div className="node-content">{data?.name || 'Agent节点'}</div>
+      <div className="react-flow__handle react-flow__handle-top" style={{ top: -8 }} data-handle-id="target" data-nodeid={data.id} />
+      <div className="react-flow__handle react-flow__handle-bottom" style={{ bottom: -8 }} data-handle-id="source" data-nodeid={data.id} />
     </div>
   );
 }
@@ -76,6 +82,8 @@ function CommonNode({ data }) {
     <div className="workflow-node common-node">
       <div className="node-header">通用组件</div>
       <div className="node-content">{data?.name || '通用组件节点'}</div>
+      <div className="react-flow__handle react-flow__handle-top" style={{ top: -8 }} data-handle-id="target" data-nodeid={data.id} />
+      <div className="react-flow__handle react-flow__handle-bottom" style={{ bottom: -8 }} data-handle-id="source" data-nodeid={data.id} />
     </div>
   );
 }
@@ -157,12 +165,23 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
 
   // 连接工作流节点
   const onConnect = useCallback(
-    (connection) => {
-      if (!connection.sourceHandle || !connection.targetHandle) {
-        console.error("Invalid connection: missing source or target handle");
+    (params) => {
+      // 确保有源节点和目标节点
+      if (!params.source || !params.target) {
+        console.error("连接缺少源节点或目标节点", params);
         return;
       }
-      setEdges((eds) => addEdge({ ...connection, id: `edge_${Date.now()}` }, eds));
+      
+      // 如果没有手柄ID，使用默认值
+      const connection = {
+        ...params,
+        sourceHandle: params.sourceHandle || 'source',
+        targetHandle: params.targetHandle || 'target',
+        id: `edge_${Date.now()}`
+      };
+      
+      console.log("创建连接:", connection);
+      setEdges((eds) => addEdge(connection, eds));
     },
     []
   );
@@ -237,7 +256,10 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
       id: `node_${Date.now()}`,
       type,
       position: { x: 250, y: 250 },
-      data: { name: `新${type}节点` }
+      data: { 
+        name: `新${type}节点`,
+        id: `node_${Date.now()}`
+      }
     };
     
     setNodes((nds) => {
@@ -248,7 +270,9 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
         const newEdge = {
           id: `edge_${Date.now()}`,
           source: lastNode.id,
-          target: newNode.id
+          target: newNode.id,
+          sourceHandle: 'source',
+          targetHandle: 'target'
         };
         setEdges((eds) => eds.concat(newEdge));
       }
@@ -299,18 +323,39 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
         y: event.clientY - reactFlowBounds.top,
       });
 
+      const nodeId = `node_${Date.now()}`;
       const newNode = {
-        id: `node_${Date.now()}`,
+        id: nodeId,
         type: componentData.type,
         position,
         data: { 
           name: componentData.title,
           component_id: componentData.id,
-          lpiCategory: componentData.category
+          lpiCategory: componentData.category,
+          id: nodeId
         },
       };
 
-      setNodes((nds) => nds.concat(newNode));
+      // 找到最近的节点并自动连接
+      setNodes((nds) => {
+        const newNodes = [...nds, newNode];
+        
+        // 尝试找到最接近的节点进行连接
+        if (nds.length > 0) {
+          // 简单地选择最后一个节点进行连接
+          const lastNode = nds[nds.length - 1];
+          const newEdge = {
+            id: `edge_${Date.now()}`,
+            source: lastNode.id,
+            target: newNode.id,
+            sourceHandle: 'source',
+            targetHandle: 'target'
+          };
+          setEdges((eds) => [...eds, newEdge]);
+        }
+        
+        return newNodes;
+      });
     },
     [reactFlowInstance]
   );
@@ -360,7 +405,8 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
       data: { 
         name: option.label,
         component_id: parseInt(option.value),
-        lpiCategory: option.category
+        lpiCategory: option.category,
+        id: `node_${Date.now()}`
       }
     };
     
@@ -373,7 +419,9 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
         const newEdge = {
           id: `edge_${Date.now()}`,
           source: lastNode.id,
-          target: newNode.id
+          target: newNode.id,
+          sourceHandle: 'source',
+          targetHandle: 'target'
         };
         setEdges((eds) => [...eds, newEdge]);
       }
@@ -808,7 +856,15 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
                       onDrop={onDrop}
                       onDragOver={onDragOver}
                       fitView
-                      defaultEdgeOptions={{ type: 'smoothstep', animated: true }}
+                      defaultEdgeOptions={{ 
+                        type: 'smoothstep', 
+                        animated: true,
+                        style: { stroke: '#1890ff', strokeWidth: 2 }
+                      }}
+                      connectionLineStyle={{ stroke: '#1890ff', strokeWidth: 2 }}
+                      connectionLineType="smoothstep"
+                      snapToGrid={true}
+                      snapGrid={[15, 15]}
                     >
                       <Controls position="bottom-right" />
                       <MiniMap 

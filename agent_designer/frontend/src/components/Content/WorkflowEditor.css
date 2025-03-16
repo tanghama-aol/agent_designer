@@ -161,30 +161,90 @@
 }
 
 .react-flow__handle {
-  width: 8px;
-  height: 8px;
-  background-color: #1890ff;
-  border: 1px solid #fff;
+  width: 10px !important;
+  height: 10px !important;
+  background-color: #1890ff !important;
+  border: 2px solid #fff !important;
+  border-radius: 50% !important;
+  cursor: crosshair !important;
+  z-index: 10 !important;
+  position: absolute;
 }
 
-.react-flow__handle-top {
-  top: -4px;
-}
-
-.react-flow__handle-right {
-  right: -4px;
+.react-flow__handle:hover {
+  background-color: #ff4d4f !important;
+  transform: scale(1.2);
+  transition: all 0.2s ease;
 }
 
 .react-flow__handle-bottom {
-  bottom: -4px;
+  bottom: -8px !important;
+  left: 50% !important;
+  transform: translate(-50%, 0);
+}
+
+.react-flow__handle-top {
+  top: -8px !important;
+  left: 50% !important;
+  transform: translate(-50%, 0);
 }
 
 .react-flow__handle-left {
-  left: -4px;
+  left: -8px !important;
+  top: 50% !important;
+  transform: translate(0, -50%);
+}
+
+.react-flow__handle-right {
+  right: -8px !important;
+  top: 50% !important;
+  transform: translate(0, -50%);
+}
+
+.react-flow__edge-path {
+  stroke: #1890ff !important;
+  stroke-width: 2px !important;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #ff4d4f !important;
+  stroke-width: 3px !important;
+}
+
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke-dasharray: 5 !important;
+  animation: dashdraw 0.5s linear infinite !important;
+}
+
+@keyframes dashdraw {
+  from {
+    stroke-dashoffset: 10;
+  }
 }
 
 .react-flow__controls {
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15) !important;
+  background-color: white !important;
+  border-radius: 4px !important;
+  padding: 4px !important;
+}
+
+.react-flow__controls-button {
+  background-color: white !important;
+  border: 1px solid #d9d9d9 !important;
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.react-flow__controls-button:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.react-flow__node.selected {
+  outline: none !important;
+}
+
+.react-flow__node.selected .workflow-node {
+  box-shadow: 0 0 0 2px #1890ff !important;
 }
 
 .react-flow__background {

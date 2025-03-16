@@ -13,3 +13,8 @@ Agent组件分为场景agent和专家Agent，专家Agent由LPI组成workflow，�
 通用LPI包括： 用户介入LPI，异步等待LPI，记忆查询，记忆修改，条件跳转，无条件跳转
 场景Agent包括：故障处理闭环
 专家Agent包括：故障诊断Agent，故障修复Agent，业务恢复Agent，修复验证Agent，故障总结Agent
+
+
+更改reactflow没有边
+index.mjs:153  [React Flow]: Couldn't create edge for source handle id: "undefined", edge id: e2. Help: https://reactflow.dev/error#008
+
