@@ -9,12 +9,13 @@ const { DirectoryTree } = Tree;
 
 const ComponentSider = ({ componentTree, onSelect, loading, onRefresh, onDragComponent }) => {
   const [searchValue, setSearchValue] = useState('');
-  const [expandedKeys, setExpandedKeys] = useState(['lpi', 'general_lpi', 'business_lpi', 'agent', 'common']);
+  const [expandedKeys, setExpandedKeys] = useState(['lpi', 'general_lpi', 'business_lpi', 'agent', 'expert_agent', 'scenario_agent', 'common']);
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [addComponentVisible, setAddComponentVisible] = useState(false);
   const [editComponentVisible, setEditComponentVisible] = useState(false);
   const [componentType, setComponentType] = useState('');
   const [lpiCategory, setLpiCategory] = useState('');
+  const [agentCategory, setAgentCategory] = useState('');
   const [currentNode, setCurrentNode] = useState(null);
   const [form] = Form.useForm();
   const [editForm] = Form.useForm();
@@ -28,7 +29,7 @@ const ComponentSider = ({ componentTree, onSelect, loading, onRefresh, onDragCom
       setAutoExpandParent(true);
     } else {
       // 如果搜索值为空，恢复默认展开状态
-      setExpandedKeys(['lpi', 'general_lpi', 'business_lpi', 'agent', 'common']);
+      setExpandedKeys(['lpi', 'general_lpi', 'business_lpi', 'agent', 'expert_agent', 'scenario_agent', 'common']);
       setAutoExpandParent(true);
     }
   };
@@ -110,9 +111,10 @@ const ComponentSider = ({ componentTree, onSelect, loading, onRefresh, onDragCom
     }
   };
 
-  const handleComponentTypeSelect = (type, category = '') => {
+  const handleComponentTypeSelect = (type, category = '', agentType = '') => {
     setComponentType(type);
     setLpiCategory(category);
+    setAgentCategory(agentType);
     setAddComponentVisible(true);
   };
 
@@ -128,7 +130,10 @@ const ComponentSider = ({ componentTree, onSelect, loading, onRefresh, onDragCom
         <Menu.Item key="unconditional_jump_lpi" onClick={() => handleComponentTypeSelect('lpi', 'unconditional_jump')}>添加无条件跳转LPI</Menu.Item>
         <Menu.Item key="business_lpi" onClick={() => handleComponentTypeSelect('lpi', 'business')}>添加业务LPI</Menu.Item>
       </Menu.SubMenu>
-      <Menu.Item key="agent" onClick={() => handleComponentTypeSelect('agent')}>添加Agent组件</Menu.Item>
+      <Menu.SubMenu key="agent" title="添加Agent组件">
+        <Menu.Item key="expert_agent" onClick={() => handleComponentTypeSelect('agent', '', 'expert')}>添加专家Agent</Menu.Item>
+        <Menu.Item key="scenario_agent" onClick={() => handleComponentTypeSelect('agent', '', 'scenario')}>添加场景Agent</Menu.Item>
+      </Menu.SubMenu>
       <Menu.Item key="common" onClick={() => handleComponentTypeSelect('common')}>添加通用组件</Menu.Item>
     </Menu>
   );
@@ -231,8 +236,8 @@ const ComponentSider = ({ componentTree, onSelect, loading, onRefresh, onDragCom
         <Spin spinning={loading}>
           {componentTree.length > 0 ? (
             <DirectoryTree
-              showLine
-              showIcon
+              showLine={{ showLeafIcon: false }}
+              showIcon={false}
               expandedKeys={expandedKeys}
               autoExpandParent={autoExpandParent}
               onExpand={handleExpand}
@@ -263,6 +268,9 @@ const ComponentSider = ({ componentTree, onSelect, loading, onRefresh, onDragCom
             <Input />
           </Form.Item>
           <Form.Item name="lpiCategory" initialValue={lpiCategory} hidden>
+            <Input />
+          </Form.Item>
+          <Form.Item name="agentCategory" initialValue={agentCategory} hidden>
             <Input />
           </Form.Item>
           <Form.Item

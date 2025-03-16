@@ -21,12 +21,26 @@
 .editor-sider {
   background-color: #f5f5f5;
   border-right: 1px solid #e8e8e8;
+  z-index: 2;
+}
+
+.sider-resizer {
+  width: 5px;
+  background-color: #e8e8e8;
+  cursor: col-resize;
+  position: relative;
+  z-index: 3;
+}
+
+.sider-resizer:hover {
+  background-color: #1890ff;
 }
 
 .editor-content {
   padding: 0;
   background-color: #f0f2f5;
   overflow: auto;
+  flex: 1;
 }
 
 .editor-footer {
@@ -61,6 +75,29 @@
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   background-color: #f9f9f9;
+}
+
+.workflow-markdown-editor {
+  height: 600px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.markdown-editor-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.markdown-editor-content {
+  flex: 1;
+  padding: 8px;
+  overflow: auto;
 }
 
 .workflow-node {
@@ -156,6 +193,17 @@
 .lpi-node.business {
   background-color: #fff7e6;
   border: 1px solid #ffd591;
+}
+
+/* Agent节点类型样式 */
+.agent-node.expert {
+  background-color: #f9f0ff;
+  border: 1px solid #d3adf7;
+}
+
+.agent-node.scenario {
+  background-color: #e6fffb;
+  border: 1px solid #87e8de;
 }
 
 .selected-node-info {

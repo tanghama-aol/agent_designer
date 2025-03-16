@@ -15,6 +15,7 @@ const EditorPage = () => {
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [draggedComponent, setDraggedComponent] = useState(null);
+  const [siderWidth, setSiderWidth] = useState(250);
 
   useEffect(() => {
     fetchComponentTree();
@@ -25,7 +26,7 @@ const EditorPage = () => {
       setLoading(true);
       const data = await getComponentTree();
       
-      // 修改树结构，将LPI分为通用LPI和业务LPI
+      // 修改树结构，将LPI分为通用LPI和业务LPI，将Agent分为专家Agent和场景Agent
       const modifiedTree = data.map(node => {
         if (node.key === 'lpi') {
           // 找到所有LPI组件
@@ -55,6 +56,35 @@ const EditorPage = () => {
                 title: '业务LPI',
                 key: 'business_lpi',
                 children: businessLpiNodes
+              }
+            ]
+          };
+        } else if (node.key === 'agent') {
+          // 找到所有Agent组件
+          const agentChildren = node.children || [];
+          
+          // 分类Agent组件
+          const expertAgentNodes = agentChildren.filter(child => 
+            child.agentType === 'expert' || !child.agentType
+          );
+          
+          const scenarioAgentNodes = agentChildren.filter(child => 
+            child.agentType === 'scenario'
+          );
+          
+          // 创建新的子节点
+          return {
+            ...node,
+            children: [
+              {
+                title: '专家Agent',
+                key: 'expert_agent',
+                children: expertAgentNodes
+              },
+              {
+                title: '场景Agent',
+                key: 'scenario_agent',
+                children: scenarioAgentNodes
               }
             ]
           };
@@ -110,6 +140,23 @@ const EditorPage = () => {
     document.dispatchEvent(dragEvent);
   };
 
+  // 处理Sider宽度调整
+  const handleSiderResize = (e) => {
+    if (e.clientX > 100 && e.clientX < 500) {
+      setSiderWidth(e.clientX);
+    }
+  };
+
+  const handleSiderResizeStart = () => {
+    document.addEventListener('mousemove', handleSiderResize);
+    document.addEventListener('mouseup', handleSiderResizeEnd);
+  };
+
+  const handleSiderResizeEnd = () => {
+    document.removeEventListener('mousemove', handleSiderResize);
+    document.removeEventListener('mouseup', handleSiderResizeEnd);
+  };
+
   return (
     <Layout>
       <Header className="editor-header">
@@ -124,22 +171,28 @@ const EditorPage = () => {
         </div>
       </Header>
       <Layout>
-        <Sider width={250} className="editor-sider">
-          <ComponentSider 
-            componentTree={componentTree} 
-            onSelect={handleComponentSelect}
-            loading={loading}
-            onRefresh={fetchComponentTree}
-            onDragComponent={handleDragComponent}
+        <div style={{ position: 'relative', display: 'flex' }}>
+          <Sider width={siderWidth} className="editor-sider">
+            <ComponentSider 
+              componentTree={componentTree} 
+              onSelect={handleComponentSelect}
+              loading={loading}
+              onRefresh={fetchComponentTree}
+              onDragComponent={handleDragComponent}
+            />
+          </Sider>
+          <div 
+            className="sider-resizer" 
+            onMouseDown={handleSiderResizeStart}
           />
-        </Sider>
-        <Content className="editor-content">
-          <ComponentDetail 
-            componentInfo={selectedComponent}
-            onRefreshTree={fetchComponentTree}
-            draggedComponent={draggedComponent}
-          />
-        </Content>
+          <Content className="editor-content">
+            <ComponentDetail 
+              componentInfo={selectedComponent}
+              onRefreshTree={fetchComponentTree}
+              draggedComponent={draggedComponent}
+            />
+          </Content>
+        </div>
       </Layout>
       <Footer className="editor-footer">
         <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
