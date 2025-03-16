@@ -23,81 +23,41 @@ const EditorPage = () => {
 
   const fetchComponentTree = async () => {
     try {
-      setLoading(true);
-      const data = await getComponentTree();
-      
-      // 修改树结构，将LPI分为通用LPI和业务LPI，将Agent分为专家Agent和场景Agent
-      const modifiedTree = data.map(node => {
-        if (node.key === 'lpi') {
-          // 找到所有LPI组件
-          const lpiChildren = node.children || [];
-          
-          // 分类LPI组件
-          const generalLpiNodes = lpiChildren.filter(child => 
-            ['general', 'user_interaction', 'async_wait', 'memory_query', 
-             'memory_modify', 'conditional_jump', 'unconditional_jump'].includes(child.category)
-          );
-          
-          const businessLpiNodes = lpiChildren.filter(child => 
-            child.category === 'business' || !['general', 'user_interaction', 'async_wait', 
-            'memory_query', 'memory_modify', 'conditional_jump', 'unconditional_jump'].includes(child.category)
-          );
-          
-          // 创建新的子节点
-          return {
-            ...node,
-            children: [
-              {
-                title: '通用LPI',
-                key: 'general_lpi',
-                children: generalLpiNodes
-              },
-              {
-                title: '业务LPI',
-                key: 'business_lpi',
-                children: businessLpiNodes
-              }
-            ]
-          };
-        } else if (node.key === 'agent') {
-          // 找到所有Agent组件
-          const agentChildren = node.children || [];
-          
-          // 分类Agent组件
-          const expertAgentNodes = agentChildren.filter(child => 
-            child.agentType === 'expert' || !child.agentType
-          );
-          
-          const scenarioAgentNodes = agentChildren.filter(child => 
-            child.agentType === 'scenario'
-          );
-          
-          // 创建新的子节点
-          return {
-            ...node,
-            children: [
-              {
-                title: '专家Agent',
-                key: 'expert_agent',
-                children: expertAgentNodes
-              },
-              {
-                title: '场景Agent',
-                key: 'scenario_agent',
-                children: scenarioAgentNodes
-              }
-            ]
-          };
-        }
-        return node;
-      });
-      
-      setComponentTree(modifiedTree);
+        setLoading(true);
+        const data = await getComponentTree();
+        
+        // 修改树结构，将LPI分为通用LPI和业务LPI，将Agent分为专家Agent和场景Agent
+        const modifiedTree = data.map(node => {
+            if (node.key === 'general_lpi') {
+                return {
+                    ...node,
+                    title: '通用LPI'
+                };
+            } else if (node.key === 'business_lpi') {
+                return {
+                    ...node,
+                    title: '业务LPI'
+                };
+            } else if (node.key === 'expert_agent') {
+                return {
+                    ...node,
+                    title: '专家Agent'
+                };
+            } else if (node.key === 'scenario_agent') {
+                return {
+                    ...node,
+                    title: '场景Agent'
+                };
+            }
+            return node;
+        });
+        
+        setComponentTree(modifiedTree);
     } catch (error) {
-      message.error('获取组件树失败');
-      console.error(error);
+        message.error('获取组件树失败');
+        console.error(error);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
@@ -171,7 +131,7 @@ const EditorPage = () => {
         </div>
       </Header>
       <Layout>
-        <div style={{ position: 'relative', display: 'flex' }}>
+        <div style={{ position: 'relative', display: 'flex', width: '100%' }}>
           <Sider width={siderWidth} className="editor-sider">
             <ComponentSider 
               componentTree={componentTree} 
@@ -185,7 +145,7 @@ const EditorPage = () => {
             className="sider-resizer" 
             onMouseDown={handleSiderResizeStart}
           />
-          <Content className="editor-content">
+          <Content className="editor-content" style={{ flex: 1 }}>
             <ComponentDetail 
               componentInfo={selectedComponent}
               onRefreshTree={fetchComponentTree}
@@ -214,4 +174,4 @@ const EditorPage = () => {
   );
 };
 
-export default EditorPage; 
+export default EditorPage;

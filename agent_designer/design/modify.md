@@ -7,3 +7,9 @@ Agent组件分为场景agent和专家Agent，专家Agent由LPI组成workflow，�
 5. 都要写入数据库初始化脚本，并展现在左侧组件树中
 6. Agent编辑器工作流和markdown编辑器放在tab中可切换
 7. 编辑器的form需要紧凑一些，如一些输入框可以放在同一行
+
+### change2:
+业务LPI包括：故障诊断LPI，诊断总结LPI，恢复方案仿真LPI，恢复方案LPI，恢复执行LPI， 修复方案LPI， 修复仿真LPI， 修复执行LPI， 故障验证LPI，故障总结LPI
+通用LPI包括： 用户介入LPI，异步等待LPI，记忆查询，记忆修改，条件跳转，无条件跳转
+场景Agent包括：故障处理闭环
+专家Agent包括：故障诊断Agent，故障修复Agent，业务恢复Agent，修复验证Agent，故障总结Agent

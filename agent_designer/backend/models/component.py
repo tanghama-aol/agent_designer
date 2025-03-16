@@ -11,6 +11,7 @@ class Component(db.Model):
     english_description = db.Column(db.Text)
     component_type = db.Column(db.String(20), nullable=False)  # lpi, agent, common
     category = db.Column(db.String(50))
+    agent_type = db.Column(db.String(20))  # 新增字段，用于标识Agent的类型
     content = db.Column(db.Text)  # JSON存储组件内容
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
@@ -39,6 +40,7 @@ class Component(db.Model):
             'english_description': self.english_description,
             'component_type': self.component_type,
             'category': self.category,
+            'agent_type': self.agent_type,  # 新增字段
             'content': self.content_obj,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
@@ -77,7 +79,8 @@ class Component(db.Model):
             'input_params': content.get('input_params', []),
             'output_params': content.get('output_params', []),
             'examples': content.get('examples', []),
-            'workflows': [workflow.to_dict() for workflow in self.workflows]
+            'workflows': [workflow.to_dict() for workflow in self.workflows],
+            'agent_type': self.agent_type  # 新增字段
         }
     
     def get_common_details(self):
@@ -93,4 +96,4 @@ class Component(db.Model):
             'english_description': self.english_description,
             'component_subtype': content.get('component_subtype', ''),  # condition, executor
             'config': content.get('config', {})
-        } 
+        }

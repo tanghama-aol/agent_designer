@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Form, Input, Button, Card, Tabs, message, Popconfirm, Select, AutoComplete } from 'antd';
-import { SaveOutlined, PlusOutlined, DeleteOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Card, Tabs, message, Popconfirm, Select, AutoComplete, Row, Col } from 'antd';
+import { SaveOutlined, PlusOutlined, DeleteOutlined, PlayCircleOutlined, EditOutlined } from '@ant-design/icons';
 import ReactFlow, { 
   Background, 
   Controls, 
@@ -11,6 +11,7 @@ import ReactFlow, {
   Panel
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import './WorkflowEditor.css';
 import { updateAgent, createWorkflow, updateWorkflow, getComponentTree } from '../../services/componentService';
 
 const { TabPane } = Tabs;
@@ -91,8 +92,22 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [componentOptions, setComponentOptions] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const [workflowMode, setWorkflowMode] = useState('flow'); // 'flow' or 'markdown'
+  const [markdownContent, setMarkdownContent] = useState(detail?.workflow_markdown || '');
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+
+  // 初始化工作流数据
+  useEffect(() => {
+    if (detail?.workflows && detail.workflows.length > 0) {
+      const workflow = detail.workflows[0];
+      if (workflow.nodes && workflow.edges) {
+        setNodes(workflow.nodes);
+        setEdges(workflow.edges);
+        setActiveWorkflowId(workflow.id);
+      }
+    }
+  }, [detail]);
 
   // 获取组件树数据用于自动完成
   useEffect(() => {
@@ -128,15 +143,27 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
     fetchComponentOptions();
   }, []);
 
-  // 初始化工作流
-  const initWorkflow = (workflowId) => {
-    if (!detail?.workflows) return;
-    
-    const workflow = detail.workflows.find(w => w.id === workflowId);
-    if (workflow) {
-      setNodes(workflow.nodes || []);
-      setEdges(workflow.edges || []);
-    }
+  // 工作流节点变化
+  const onNodesChange = useCallback(
+    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    []
+  );
+
+  // 工作流边变化
+  const onEdgesChange = useCallback(
+    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+    []
+  );
+
+  // 连接工作流节点
+  const onConnect = useCallback(
+    (connection) => setEdges((eds) => addEdge(connection, eds)),
+    []
+  );
+
+  // 选择节点
+  const onNodeClick = (event, node) => {
+    setSelectedNode(node);
   };
 
   // 保存Agent
@@ -198,91 +225,6 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
     }
   };
 
-  // 添加输入参数
-  const handleAddInputParam = () => {
-    setInputParams([...inputParams, { name: '', type: 'string', description: '', required: true }]);
-  };
-
-  // 修改输入参数
-  const handleInputParamChange = (index, field, value) => {
-    const newParams = [...inputParams];
-    newParams[index][field] = value;
-    setInputParams(newParams);
-  };
-
-  // 删除输入参数
-  const handleRemoveInputParam = (index) => {
-    const newParams = [...inputParams];
-    newParams.splice(index, 1);
-    setInputParams(newParams);
-  };
-
-  // 添加输出参数
-  const handleAddOutputParam = () => {
-    setOutputParams([...outputParams, { name: '', type: 'string', description: '' }]);
-  };
-
-  // 修改输出参数
-  const handleOutputParamChange = (index, field, value) => {
-    const newParams = [...outputParams];
-    newParams[index][field] = value;
-    setOutputParams(newParams);
-  };
-
-  // 删除输出参数
-  const handleRemoveOutputParam = (index) => {
-    const newParams = [...outputParams];
-    newParams.splice(index, 1);
-    setOutputParams(newParams);
-  };
-
-  // 添加示例
-  const handleAddExample = () => {
-    setExamples([...examples, { input: {}, output: {} }]);
-  };
-
-  // 修改示例
-  const handleExampleChange = (index, field, value) => {
-    const newExamples = [...examples];
-    try {
-      newExamples[index][field] = JSON.parse(value);
-    } catch (e) {
-      // 如果不是有效的JSON，则保存为字符串
-      newExamples[index][field] = value;
-    }
-    setExamples(newExamples);
-  };
-
-  // 删除示例
-  const handleRemoveExample = (index) => {
-    const newExamples = [...examples];
-    newExamples.splice(index, 1);
-    setExamples(newExamples);
-  };
-
-  // 工作流节点变化
-  const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [setNodes]
-  );
-
-  // 工作流边变化
-  const onEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
-  );
-
-  // 连接工作流节点
-  const onConnect = useCallback(
-    (connection) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges]
-  );
-
-  // 选择节点
-  const onNodeClick = (event, node) => {
-    setSelectedNode(node);
-  };
-
   // 添加节点
   const addNode = (type) => {
     const newNode = {
@@ -292,7 +234,21 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
       data: { name: `新${type}节点` }
     };
     
-    setNodes([...nodes, newNode]);
+    setNodes((nds) => {
+      const newNodes = nds.concat(newNode);
+      const lastNode = nds[nds.length - 1];
+      
+      if (lastNode) {
+        const newEdge = {
+          id: `edge_${Date.now()}`,
+          source: lastNode.id,
+          target: newNode.id
+        };
+        setEdges((eds) => eds.concat(newEdge));
+      }
+      
+      return newNodes;
+    });
   };
 
   // 删除节点
@@ -314,8 +270,18 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
     (event) => {
       event.preventDefault();
 
+      if (!reactFlowInstance || !reactFlowWrapper.current) {
+        return;
+      }
+
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const componentData = JSON.parse(event.dataTransfer.getData('application/reactflow'));
+      let componentData;
+      
+      try {
+        componentData = JSON.parse(event.dataTransfer.getData('application/reactflow'));
+      } catch (err) {
+        return;
+      }
 
       // 检查是否有组件数据
       if (!componentData) {
@@ -392,8 +358,109 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
       }
     };
     
-    setNodes([...nodes, newNode]);
+    setNodes((nds) => {
+      const newNodes = [...nds, newNode];
+      
+      // 如果已有节点，自动连接到上一个节点
+      if (nds.length > 0) {
+        const lastNode = nds[nds.length - 1];
+        const newEdge = {
+          id: `edge_${Date.now()}`,
+          source: lastNode.id,
+          target: newNode.id
+        };
+        setEdges((eds) => [...eds, newEdge]);
+      }
+      
+      return newNodes;
+    });
+    
     setSearchText('');
+  };
+
+  // 切换工作流编辑模式
+  const handleModeChange = (mode) => {
+    setWorkflowMode(mode);
+  };
+
+  // 保存Markdown内容
+  const handleMarkdownSave = async () => {
+    try {
+      setLoading(true);
+      await updateAgent(detail.id, {
+        ...detail,
+        workflow_markdown: markdownContent
+      });
+      message.success('Markdown保存成功');
+      onRefresh();
+    } catch (error) {
+      console.error('保存失败:', error);
+      message.error('保存失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 添加输入参数
+  const handleAddInputParam = () => {
+    setInputParams([...inputParams, { name: '', type: 'string', description: '', required: true }]);
+  };
+
+  // 修改输入参数
+  const handleInputParamChange = (index, field, value) => {
+    const newParams = [...inputParams];
+    newParams[index][field] = value;
+    setInputParams(newParams);
+  };
+
+  // 删除输入参数
+  const handleRemoveInputParam = (index) => {
+    const newParams = [...inputParams];
+    newParams.splice(index, 1);
+    setInputParams(newParams);
+  };
+
+  // 添加输出参数
+  const handleAddOutputParam = () => {
+    setOutputParams([...outputParams, { name: '', type: 'string', description: '' }]);
+  };
+
+  // 修改输出参数
+  const handleOutputParamChange = (index, field, value) => {
+    const newParams = [...outputParams];
+    newParams[index][field] = value;
+    setOutputParams(newParams);
+  };
+
+  // 删除输出参数
+  const handleRemoveOutputParam = (index) => {
+    const newParams = [...outputParams];
+    newParams.splice(index, 1);
+    setOutputParams(newParams);
+  };
+
+  // 添加示例
+  const handleAddExample = () => {
+    setExamples([...examples, { input: {}, output: {} }]);
+  };
+
+  // 修改示例
+  const handleExampleChange = (index, field, value) => {
+    const newExamples = [...examples];
+    try {
+      newExamples[index][field] = JSON.parse(value);
+    } catch (e) {
+      // 如果不是有效的JSON，则保存为字符串
+      newExamples[index][field] = value;
+    }
+    setExamples(newExamples);
+  };
+
+  // 删除示例
+  const handleRemoveExample = (index) => {
+    const newExamples = [...examples];
+    newExamples.splice(index, 1);
+    setExamples(newExamples);
   };
 
   return (
@@ -419,33 +486,55 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
           name: detail?.name || '',
           description: detail?.description || '',
           english_description: detail?.english_description || '',
-          category: detail?.category || ''
+          category: detail?.category || '',
+          agent_type: detail?.agent_type || 'expert'
         }}
       >
         <Tabs defaultActiveKey="basic">
           <TabPane tab="基本信息" key="basic">
-            <Form.Item
-              name="name"
-              label="组件名称"
-              rules={[{ required: true, message: '请输入组件名称' }]}
-            >
-              <Input placeholder="请输入组件名称" />
-            </Form.Item>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="name"
+                  label="组件名称"
+                  rules={[{ required: true, message: '请输入组件名称' }]}
+                >
+                  <Input placeholder="请输入组件名称" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="agent_type"
+                  label="Agent类型"
+                  rules={[{ required: true, message: '请选择Agent类型' }]}
+                >
+                  <Select>
+                    <Option value="expert">专家Agent</Option>
+                    <Option value="scenario">场景Agent</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
 
-            <Form.Item
-              name="description"
-              label="中文描述"
-              rules={[{ required: true, message: '请输入中文描述' }]}
-            >
-              <TextArea placeholder="请输入中文描述" rows={2} />
-            </Form.Item>
-
-            <Form.Item
-              name="english_description"
-              label="英文描述"
-            >
-              <TextArea placeholder="请输入英文描述" rows={2} />
-            </Form.Item>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="description"
+                  label="中文描述"
+                  rules={[{ required: true, message: '请输入中文描述' }]}
+                >
+                  <TextArea placeholder="请输入中文描述" rows={2} />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="english_description"
+                  label="英文描述"
+                >
+                  <TextArea placeholder="请输入英文描述" rows={2} />
+                </Form.Item>
+              </Col>
+            </Row>
 
             <Form.Item
               name="category"
@@ -473,25 +562,42 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
                   </Popconfirm>
                 }
               >
-                <Form.Item label="参数名称">
-                  <Input 
-                    value={param.name} 
-                    onChange={(e) => handleInputParamChange(index, 'name', e.target.value)} 
-                    placeholder="请输入参数名称"
-                  />
-                </Form.Item>
-                <Form.Item label="参数类型">
-                  <Select 
-                    value={param.type} 
-                    onChange={(value) => handleInputParamChange(index, 'type', value)}
-                  >
-                    <Option value="string">字符串</Option>
-                    <Option value="number">数字</Option>
-                    <Option value="boolean">布尔值</Option>
-                    <Option value="object">对象</Option>
-                    <Option value="array">数组</Option>
-                  </Select>
-                </Form.Item>
+                <Row gutter={16}>
+                  <Col span={8}>
+                    <Form.Item label="参数名称">
+                      <Input 
+                        value={param.name} 
+                        onChange={(e) => handleInputParamChange(index, 'name', e.target.value)} 
+                        placeholder="请输入参数名称"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item label="参数类型">
+                      <Select 
+                        value={param.type} 
+                        onChange={(value) => handleInputParamChange(index, 'type', value)}
+                      >
+                        <Option value="string">字符串</Option>
+                        <Option value="number">数字</Option>
+                        <Option value="boolean">布尔值</Option>
+                        <Option value="object">对象</Option>
+                        <Option value="array">数组</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item label="是否必填">
+                      <Select 
+                        value={param.required} 
+                        onChange={(value) => handleInputParamChange(index, 'required', value)}
+                      >
+                        <Option value={true}>是</Option>
+                        <Option value={false}>否</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
                 <Form.Item label="参数描述">
                   <TextArea 
                     value={param.description} 
@@ -499,15 +605,6 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
                     placeholder="请输入参数描述"
                     rows={2}
                   />
-                </Form.Item>
-                <Form.Item label="是否必填">
-                  <Select 
-                    value={param.required} 
-                    onChange={(value) => handleInputParamChange(index, 'required', value)}
-                  >
-                    <Option value={true}>是</Option>
-                    <Option value={false}>否</Option>
-                  </Select>
                 </Form.Item>
               </Card>
             ))}
@@ -539,25 +636,31 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
                   </Popconfirm>
                 }
               >
-                <Form.Item label="参数名称">
-                  <Input 
-                    value={param.name} 
-                    onChange={(e) => handleOutputParamChange(index, 'name', e.target.value)} 
-                    placeholder="请输入参数名称"
-                  />
-                </Form.Item>
-                <Form.Item label="参数类型">
-                  <Select 
-                    value={param.type} 
-                    onChange={(value) => handleOutputParamChange(index, 'type', value)}
-                  >
-                    <Option value="string">字符串</Option>
-                    <Option value="number">数字</Option>
-                    <Option value="boolean">布尔值</Option>
-                    <Option value="object">对象</Option>
-                    <Option value="array">数组</Option>
-                  </Select>
-                </Form.Item>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item label="参数名称">
+                      <Input 
+                        value={param.name} 
+                        onChange={(e) => handleOutputParamChange(index, 'name', e.target.value)} 
+                        placeholder="请输入参数名称"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="参数类型">
+                      <Select 
+                        value={param.type} 
+                        onChange={(value) => handleOutputParamChange(index, 'type', value)}
+                      >
+                        <Option value="string">字符串</Option>
+                        <Option value="number">数字</Option>
+                        <Option value="boolean">布尔值</Option>
+                        <Option value="object">对象</Option>
+                        <Option value="array">数组</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
                 <Form.Item label="参数描述">
                   <TextArea 
                     value={param.description} 
@@ -596,22 +699,28 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
                   </Popconfirm>
                 }
               >
-                <Form.Item label="输入示例">
-                  <TextArea 
-                    value={typeof example.input === 'object' ? JSON.stringify(example.input, null, 2) : example.input} 
-                    onChange={(e) => handleExampleChange(index, 'input', e.target.value)} 
-                    placeholder="请输入JSON格式的输入示例"
-                    rows={4}
-                  />
-                </Form.Item>
-                <Form.Item label="输出示例">
-                  <TextArea 
-                    value={typeof example.output === 'object' ? JSON.stringify(example.output, null, 2) : example.output} 
-                    onChange={(e) => handleExampleChange(index, 'output', e.target.value)} 
-                    placeholder="请输入JSON格式的输出示例"
-                    rows={4}
-                  />
-                </Form.Item>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item label="输入示例">
+                      <TextArea 
+                        value={typeof example.input === 'object' ? JSON.stringify(example.input, null, 2) : example.input} 
+                        onChange={(e) => handleExampleChange(index, 'input', e.target.value)} 
+                        placeholder="请输入JSON格式的输入示例"
+                        rows={4}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="输出示例">
+                      <TextArea 
+                        value={typeof example.output === 'object' ? JSON.stringify(example.output, null, 2) : example.output} 
+                        onChange={(e) => handleExampleChange(index, 'output', e.target.value)} 
+                        placeholder="请输入JSON格式的输出示例"
+                        rows={4}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
               </Card>
             ))}
             <Button 
@@ -626,10 +735,24 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
 
           <TabPane tab="工作流" key="workflow">
             <div className="workflow-actions">
+              <Button.Group>
+                <Button 
+                  type={workflowMode === 'flow' ? 'primary' : 'default'}
+                  onClick={() => handleModeChange('flow')}
+                >
+                  可视化编辑
+                </Button>
+                <Button 
+                  type={workflowMode === 'markdown' ? 'primary' : 'default'}
+                  onClick={() => handleModeChange('markdown')}
+                >
+                  Markdown编辑
+                </Button>
+              </Button.Group>
               <Button 
                 type="primary" 
                 icon={<SaveOutlined />} 
-                onClick={handleSaveWorkflow}
+                onClick={workflowMode === 'flow' ? handleSaveWorkflow : handleMarkdownSave}
                 loading={loading}
               >
                 保存工作流
@@ -643,56 +766,99 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
               </Button>
             </div>
 
-            <div className="workflow-tools">
-              <Button onClick={() => addNode('start')}>添加开始节点</Button>
-              <Button onClick={() => addNode('end')}>添加结束节点</Button>
-              <Button onClick={deleteNode} disabled={!selectedNode}>删除选中节点</Button>
-            </div>
+            {workflowMode === 'flow' ? (
+              <>
+                <div className="workflow-tools">
+                  <Button onClick={() => addNode('start')}>添加开始节点</Button>
+                  <Button onClick={() => addNode('end')}>添加结束节点</Button>
+                  <Button onClick={deleteNode} disabled={!selectedNode}>删除选中节点</Button>
+                </div>
 
-            <div className="component-search">
-              <AutoComplete
-                style={{ width: '100%', marginBottom: 16 }}
-                options={componentOptions}
-                value={searchText}
-                onChange={handleSearch}
-                onSelect={handleSelect}
-                placeholder="搜索组件添加到工作流"
-                filterOption={(inputValue, option) =>
-                  option.label.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
-                }
-              />
-            </div>
+                <div className="component-search">
+                  <AutoComplete
+                    style={{ width: '100%', marginBottom: 16 }}
+                    options={componentOptions}
+                    value={searchText}
+                    onChange={handleSearch}
+                    onSelect={handleSelect}
+                    placeholder="搜索组件添加到工作流"
+                    filterOption={(inputValue, option) =>
+                      option.label.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
+                    }
+                  />
+                </div>
 
-            <div className="workflow-editor" ref={reactFlowWrapper}>
-              <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                onNodeClick={onNodeClick}
-                nodeTypes={nodeTypes}
-                onInit={setReactFlowInstance}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-                fitView
-              >
-                <Controls />
-                <MiniMap />
-                <Background variant="dots" gap={12} size={1} />
-                <Panel position="top-right">
-                  <div className="selected-node-info">
-                    {selectedNode && (
-                      <Card size="small" title="节点属性">
-                        <p>ID: {selectedNode.id}</p>
-                        <p>类型: {selectedNode.type}</p>
-                        <p>名称: {selectedNode.data?.name}</p>
-                      </Card>
-                    )}
+                <div className="workflow-editor-container">
+                  <div className="workflow-editor" ref={reactFlowWrapper}>
+                    <ReactFlow
+                      nodes={nodes}
+                      edges={edges}
+                      onNodesChange={onNodesChange}
+                      onEdgesChange={onEdgesChange}
+                      onConnect={onConnect}
+                      onNodeClick={onNodeClick}
+                      nodeTypes={nodeTypes}
+                      onInit={setReactFlowInstance}
+                      onDrop={onDrop}
+                      onDragOver={onDragOver}
+                      fitView
+                      defaultEdgeOptions={{ type: 'smoothstep', animated: true }}
+                    >
+                      <Controls position="bottom-right" />
+                      <MiniMap 
+                        nodeStrokeColor={(n) => {
+                          if (n.type === 'start') return '#0041d0';
+                          if (n.type === 'end') return '#ff0072';
+                          if (n.type === 'lpi') return '#ff9a00';
+                          if (n.type === 'agent') return '#7b00ff';
+                          return '#999';
+                        }}
+                        nodeColor={(n) => {
+                          if (n.type === 'start') return '#e6f7ff';
+                          if (n.type === 'end') return '#f6ffed';
+                          if (n.type === 'lpi') return '#fff7e6';
+                          if (n.type === 'agent') return '#f9f0ff';
+                          return '#f5f5f5';
+                        }}
+                      />
+                      <Background variant="dots" gap={12} size={1} />
+                      <Panel position="top-right">
+                        <div className="selected-node-info">
+                          {selectedNode && (
+                            <Card size="small" title="节点属性">
+                              <p>ID: {selectedNode.id}</p>
+                              <p>类型: {selectedNode.type}</p>
+                              <p>名称: {selectedNode.data?.name}</p>
+                            </Card>
+                          )}
+                        </div>
+                      </Panel>
+                    </ReactFlow>
                   </div>
-                </Panel>
-              </ReactFlow>
-            </div>
+                </div>
+              </>
+            ) : (
+              <div className="workflow-markdown-editor">
+                <div className="markdown-editor-header">
+                  <span>Markdown编辑器</span>
+                  <Button 
+                    type="text" 
+                    icon={<EditOutlined />}
+                    onClick={() => message.info('预览功能待实现')}
+                  >
+                    预览
+                  </Button>
+                </div>
+                <div className="markdown-editor-content">
+                  <TextArea
+                    value={markdownContent}
+                    onChange={(e) => setMarkdownContent(e.target.value)}
+                    placeholder="请输入工作流的Markdown描述"
+                    style={{ height: '100%', border: 'none', resize: 'none' }}
+                  />
+                </div>
+              </div>
+            )}
           </TabPane>
         </Tabs>
       </Form>

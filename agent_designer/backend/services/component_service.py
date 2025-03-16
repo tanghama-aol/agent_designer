@@ -7,8 +7,10 @@ def get_component_tree():
     tree = []
     
     # 组织组件树结构
-    lpi_components = []
-    agent_components = []
+    lpi_general_components = []
+    lpi_business_components = []
+    agent_expert_components = []
+    agent_scenario_components = []
     common_components = []
     
     for comp in components:
@@ -16,28 +18,50 @@ def get_component_tree():
             'title': comp.name,
             'key': f'{comp.component_type}-{comp.id}',
             'type': comp.component_type,
-            'id': comp.id
+            'id': comp.id,
+            'category': comp.category,  # 添加category字段
+            'agent_type': comp.agent_type  # 添加agent_type字段
         }
         
         if comp.component_type == 'lpi':
-            lpi_components.append(node)
+            if comp.category in ['general', 'user_interaction', 'async_wait', 'memory_query', 'memory_modify', 'conditional_jump', 'unconditional_jump']:
+                lpi_general_components.append(node)
+            else:
+                lpi_business_components.append(node)
         elif comp.component_type == 'agent':
-            agent_components.append(node)
+            if comp.agent_type == 'expert':
+                agent_expert_components.append(node)
+            elif comp.agent_type == 'scenario':
+                agent_scenario_components.append(node)
         else:
             common_components.append(node)
     
-    if lpi_components:
+    if lpi_general_components:
         tree.append({
-            'title': 'LPI组件',
-            'key': 'lpi',
-            'children': lpi_components
+            'title': '通用LPI',
+            'key': 'general_lpi',
+            'children': lpi_general_components
         })
     
-    if agent_components:
+    if lpi_business_components:
         tree.append({
-            'title': 'Agent组件',
-            'key': 'agent',
-            'children': agent_components
+            'title': '业务LPI',
+            'key': 'business_lpi',
+            'children': lpi_business_components
+        })
+    
+    if agent_expert_components:
+        tree.append({
+            'title': '专家Agent',
+            'key': 'expert_agent',
+            'children': agent_expert_components
+        })
+    
+    if agent_scenario_components:
+        tree.append({
+            'title': '场景Agent',
+            'key': 'scenario_agent',
+            'children': agent_scenario_components
         })
     
     if common_components:
