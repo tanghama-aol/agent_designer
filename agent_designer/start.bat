@@ -1,8 +1,8 @@
 @echo off
 echo Starting frontend...
 cd frontend
-start "" npm run dev
+start "" cmd /c "npm run dev"
 
 echo Starting backend...
-cd ..\backend
-start "" python app.py
+cd backend
+start "" cmd /c "python app.py"

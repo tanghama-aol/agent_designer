@@ -1,6 +1,14 @@
 @echo off
 echo Stopping frontend...
-taskkill /im node.exe /f
+if exist frontend.pid (
+    set /p FRONTEND_PID=<frontend.pid
+    taskkill /pid %FRONTEND_PID% /f
+    del frontend.pid
+)
 
 echo Stopping backend...
-taskkill /im python.exe /f
+if exist backend.pid (
+    set /p BACKEND_PID=<backend.pid
+    taskkill /pid %BACKEND_PID% /f
+    del backend.pid
+)
