@@ -1,0 +1,9 @@
+{
+  "id": "e32dd3d5-2ed2-45a3-826b-a945315e6cff",
+  "name": "下一步修复验证Agent",
+  "description": "下一步修复验证Agent",
+  "english_description": "下一步修复验证Agent",
+  "type": "business",
+  "category": "故障修复Agent",
+  "filename": "busi_repairverificationagent"
+}

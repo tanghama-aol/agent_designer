@@ -1,31 +1,64 @@
 /* 工作流编辑器样式 */
 .workflow-editor-container {
-  width: 100%;
-  height: 500px;
-  position: relative;
+  height: 600px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
 }
 
 .workflow-editor {
   width: 100%;
   height: 100%;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  background-color: #f9f9f9;
-}
-
-.workflow-tools {
-  margin-bottom: 16px;
-  display: flex;
-  gap: 8px;
 }
 
 .workflow-actions {
   display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.workflow-tools {
+  display: flex;
   gap: 8px;
   margin-bottom: 16px;
 }
 
-/* 节点基础样式 */
+.selected-node-info {
+  min-width: 200px;
+}
+
+.node-properties {
+  background-color: white;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-markdown-editor {
+  height: 600px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.markdown-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.markdown-editor-content {
+  flex: 1;
+  padding: 8px;
+}
+
+/* 节点样式 */
 .workflow-node {
   padding: 10px;
   border-radius: 5px;
@@ -46,13 +79,7 @@
   font-size: 18px;
 }
 
-.node-category {
-  font-size: 12px;
-  margin-top: 5px;
-  color: #888;
-}
-
-/* 节点类型样式 */
+/* 开始节点 */
 .start-node {
   background-color: #e6f7ff;
   border: 1px solid #1890ff;
@@ -62,6 +89,7 @@
   color: #1890ff;
 }
 
+/* 结束节点 */
 .end-node {
   background-color: #f6ffed;
   border: 1px solid #52c41a;
@@ -71,6 +99,20 @@
   color: #52c41a;
 }
 
+/* 阶段节点 */
+.phase-node {
+  background-color: #fcfbe6;
+  border: 1px solid #d4b106;
+  padding: 10px;
+  min-width: 200px;
+  min-height: 150px;
+}
+
+.phase-node .node-icon {
+  color: #d4b106;
+}
+
+/* LPI节点 */
 .lpi-node {
   background-color: #fff7e6;
   border: 1px solid #fa8c16;
@@ -80,6 +122,7 @@
   color: #fa8c16;
 }
 
+/* Agent节点 */
 .agent-node {
   background-color: #f9f0ff;
   border: 1px solid #722ed1;
@@ -89,6 +132,7 @@
   color: #722ed1;
 }
 
+/* 通用组件节点 */
 .common-node {
   background-color: #f5f5f5;
   border: 1px solid #8c8c8c;
@@ -96,6 +140,79 @@
 
 .common-node .node-icon {
   color: #8c8c8c;
+}
+
+.node-category {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #888;
+}
+
+/* 连接线样式 */
+.react-flow__edge-path {
+  stroke: #1890ff;
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #f5222d;
+  stroke-width: 3;
+}
+
+/* 阶段-任务层级结构样式 */
+.react-flow__node-phase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.react-flow__node-lpi.is-child {
+  width: 180px;
+  margin: 10px 0;
+}
+
+/* 工作流容器和网格背景 */
+.react-flow__background {
+  background-color: #fafafa;
+}
+
+/* 工作流缩放控制 */
+.react-flow__controls {
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.react-flow__controls button {
+  background-color: white;
+  border: none;
+  color: #595959;
+}
+
+.react-flow__controls button:hover {
+  background-color: #f0f0f0;
+}
+
+/* 节点基础样式 */
+.workflow-node {
+  padding: 10px;
+  border-radius: 5px;
+  min-width: 150px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0; /* 移除底部外边距 */
+}
+
+.workflow-node .node-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.workflow-node .node-icon {
+  font-size: 18px;
 }
 
 /* LPI节点类型样式 */
@@ -148,10 +265,6 @@
 .agent-node.scenario {
   background-color: #e6fffb;
   border: 1px solid #87e8de;
-}
-
-.selected-node-info {
-  width: 200px;
 }
 
 /* ReactFlow特定样式 */
@@ -265,39 +378,9 @@
   box-shadow: 0 0 0 2px #1890ff !important;
 }
 
-.react-flow__background {
-  background-color: #fafafa;
-}
-
 .react-flow__minimap {
   border: 1px solid #d9d9d9;
   border-radius: 4px;
-}
-
-/* Markdown编辑器样式 */
-.workflow-markdown-editor {
-  height: 500px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.markdown-editor-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-  border-bottom: 1px solid #d9d9d9;
-  background-color: #fafafa;
-}
-
-.markdown-editor-content {
-  flex: 1;
-  overflow: auto;
-  padding: 0;
 }
 
 .component-search {

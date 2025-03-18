@@ -1,0 +1,14 @@
+{
+  "id": "7675b6b1-dd02-48e5-b981-d26f465e8791",
+  "name": "业务恢复Agent",
+  "description": "业务恢复Agent专家",
+  "english_description": "业务恢复Agent Expert Agent",
+  "type": "expert",
+  "category": "故障闭环场景Agent",
+  "phases": [
+    "688a475d-830b-4b45-b361-97750bd95051",
+    "43e840f9-73b8-42e2-a315-d2c120eaf306",
+    "a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64"
+  ],
+  "filename": "expert_businessrecoveryagent"
+}

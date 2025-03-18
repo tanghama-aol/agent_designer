@@ -19,3 +19,20 @@ Agent组件分为场景agent和专家Agent，专家Agent由LPI组成workflow，�
 index.mjs:153  [React Flow]: Couldn't create edge for source handle id: "undefined", edge id: e2. Help: https://reactflow.dev/error#008
 
 ### change3：
+根据DiagnoseAgentWorkFlow.md生成相应的场景Agent，专家Agent，专家Agent对应的工作流
+场景Agent用一级标题表示
+专家Agent用二级标题表示
+专家Agent对应的工作流包含阶段和任务，阶段用三级标题表示，任务是阶段下面的序列，包括序号和对应的LPI描述
+编写翻译代码，根据Agent描述生成
+backend/data/agent/生成场景Agent定义json
+backend/data/agent/生成专家Agent定义json
+backend/data/agent/生成专家Agent对应的工作流json
+backend/data/lpi/busi/生成业务lpi定义json
+backend/data/lpi/common/生成通用lpi定义json
+
+修改相应的前后端代码，从data目录中读取场景Agent，专家Agent，业务LPI，通用LPI
+修改专家Agent工作流显示reactflow，增加阶段节点，阶段节点横向排列， LPI节点作为阶段节点子节点，纵向排列
+场景Agent工作流由专家Agent名字节点组成
+
+通用LPI包括： 用户介入LPI，异步等待LPI，记忆查询LPI，记忆修改LPI，条件跳转LPI，无条件跳转LPI，下一步LPI
+busi下的有些对应的通用LPI，如\backend\data\lpi\busi\busi_6.json，不是跳转6，是无条件跳转，参数为6，所以就是无条件跳转LPI，请修改busi下的LPI，去掉或移动到通用LPI下

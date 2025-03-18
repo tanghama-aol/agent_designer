@@ -1,0 +1,9 @@
+{
+  "id": "7fba0c91-0e15-4947-a66c-84a39d3e66d6",
+  "name": "下一步故障总结Agent",
+  "description": "下一步故障总结Agent",
+  "english_description": "下一步故障总结Agent",
+  "type": "business",
+  "category": "修复验证Agent",
+  "filename": "busi_faultsummaryagent"
+}

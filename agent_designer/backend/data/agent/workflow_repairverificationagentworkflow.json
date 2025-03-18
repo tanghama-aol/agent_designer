@@ -1,0 +1,146 @@
+{
+  "id": "aa3e92c6-b015-4060-8481-823cdeb235cb",
+  "name": "修复验证Agent工作流",
+  "description": "修复验证Agent的执行流程",
+  "agent_id": "bafed689-5d5a-4d0a-bb38-d254e51af0e6",
+  "phases": [
+    {
+      "id": "9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "name": "主流程",
+      "full_name": "修复验证.主流程",
+      "tasks": [
+        {
+          "id": "fef144d5-0ded-44ef-a1bb-50e662d2e0ac",
+          "name": "修复结果展现",
+          "type": "lpi",
+          "filename": "busi_repair"
+        },
+        {
+          "id": "65f048d7-1a08-4feb-a6df-32fb44ced734",
+          "name": "用户介入",
+          "type": "lpi",
+          "filename": "common_user_intervention"
+        },
+        {
+          "id": "7fba0c91-0e15-4947-a66c-84a39d3e66d6",
+          "name": "下一步故障总结Agent",
+          "type": "lpi",
+          "filename": "busi_faultsummaryagent"
+        }
+      ]
+    }
+  ],
+  "filename": "workflow_repairverificationagentworkflow",
+  "nodes": [
+    {
+      "id": "start",
+      "type": "start",
+      "position": {
+        "x": 50,
+        "y": 50
+      },
+      "data": {
+        "name": "开始"
+      }
+    },
+    {
+      "id": "phase_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "type": "phase",
+      "position": {
+        "x": 350,
+        "y": 50
+      },
+      "data": {
+        "name": "主流程"
+      }
+    },
+    {
+      "id": "task_fef144d5-0ded-44ef-a1bb-50e662d2e0ac",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 150
+      },
+      "data": {
+        "name": "修复结果展现",
+        "component_id": "fef144d5-0ded-44ef-a1bb-50e662d2e0ac",
+        "id": "task_fef144d5-0ded-44ef-a1bb-50e662d2e0ac"
+      },
+      "parentNode": "phase_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "extent": "parent"
+    },
+    {
+      "id": "task_65f048d7-1a08-4feb-a6df-32fb44ced734",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 230
+      },
+      "data": {
+        "name": "用户介入",
+        "component_id": "65f048d7-1a08-4feb-a6df-32fb44ced734",
+        "id": "task_65f048d7-1a08-4feb-a6df-32fb44ced734"
+      },
+      "parentNode": "phase_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "extent": "parent"
+    },
+    {
+      "id": "task_7fba0c91-0e15-4947-a66c-84a39d3e66d6",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 310
+      },
+      "data": {
+        "name": "下一步故障总结Agent",
+        "component_id": "7fba0c91-0e15-4947-a66c-84a39d3e66d6",
+        "id": "task_7fba0c91-0e15-4947-a66c-84a39d3e66d6"
+      },
+      "parentNode": "phase_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "extent": "parent"
+    },
+    {
+      "id": "end",
+      "type": "end",
+      "position": {
+        "x": 650,
+        "y": 50
+      },
+      "data": {
+        "name": "结束"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_start_to_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "source": "start",
+      "target": "phase_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99_to_fef144d5-0ded-44ef-a1bb-50e662d2e0ac",
+      "source": "phase_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "target": "task_fef144d5-0ded-44ef-a1bb-50e662d2e0ac",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_fef144d5-0ded-44ef-a1bb-50e662d2e0ac_to_65f048d7-1a08-4feb-a6df-32fb44ced734",
+      "source": "task_fef144d5-0ded-44ef-a1bb-50e662d2e0ac",
+      "target": "task_65f048d7-1a08-4feb-a6df-32fb44ced734",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_65f048d7-1a08-4feb-a6df-32fb44ced734_to_7fba0c91-0e15-4947-a66c-84a39d3e66d6",
+      "source": "task_65f048d7-1a08-4feb-a6df-32fb44ced734",
+      "target": "task_7fba0c91-0e15-4947-a66c-84a39d3e66d6",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99_to_end",
+      "source": "phase_9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99",
+      "target": "end",
+      "type": "smoothstep"
+    }
+  ]
+}

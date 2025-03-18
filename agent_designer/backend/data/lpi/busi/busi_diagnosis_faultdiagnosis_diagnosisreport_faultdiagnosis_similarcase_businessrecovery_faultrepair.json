@@ -1,0 +1,9 @@
+{
+  "id": "e8f8ad1d-e888-474b-a6bc-bf5feb472bf5",
+  "name": "处理诊断过程结果，支线：跳转故障诊断.诊断报告， 故障诊断.相似案例，业务恢复，故障修复）",
+  "description": "处理诊断过程结果，支线：跳转故障诊断.诊断报告， 故障诊断.相似案例，业务恢复，故障修复）",
+  "english_description": "处理诊断过程结果，支线：跳转故障诊断.诊断报告， 故障诊断.相似案例，业务恢复，故障修复）",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_diagnosis_faultdiagnosis_diagnosisreport_faultdiagnosis_similarcase_businessrecovery_faultrepair"
+}

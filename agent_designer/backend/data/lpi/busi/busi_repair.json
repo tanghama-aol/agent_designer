@@ -1,0 +1,9 @@
+{
+  "id": "fef144d5-0ded-44ef-a1bb-50e662d2e0ac",
+  "name": "修复结果展现",
+  "description": "修复结果展现",
+  "english_description": "修复结果展现",
+  "type": "business",
+  "category": "修复验证Agent",
+  "filename": "busi_repair"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "5aed98ef-5652-425b-89ea-6bddd06d458e",
+  "name": "是否是思维链指导说明",
+  "description": "是否是思维链指导说明",
+  "english_description": "是否是思维链指导说明",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_chain_of_thought"
+}

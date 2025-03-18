@@ -1,0 +1,9 @@
+{
+  "id": "69128959-4aac-4f14-b1ac-07f89d06a151",
+  "name": "显示相似案例",
+  "description": "显示相似案例",
+  "english_description": "显示相似案例",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_displaysimilarcase"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "89428111-7d29-498d-9320-a61a543d1311",
+  "name": "显示诊断报告下载",
+  "description": "显示诊断报告下载",
+  "english_description": "显示诊断报告下载",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_displaydiagnosisreportdownload"
+}

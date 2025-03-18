@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Form, Input, Button, Card, Tabs, message, Popconfirm, Select, AutoComplete, Row, Col } from 'antd';
-import { SaveOutlined, PlusOutlined, DeleteOutlined, PlayCircleOutlined, EditOutlined } from '@ant-design/icons';
+import { SaveOutlined, PlusOutlined, DeleteOutlined, PlayCircleOutlined, EditOutlined, AppstoreOutlined } from '@ant-design/icons';
 import ReactFlow, { 
   Background, 
   Controls, 
@@ -18,9 +18,10 @@ import { updateAgent, createWorkflow, updateWorkflow, getComponentTree } from '.
 import { 
   RocketOutlined, 
   ApiOutlined, 
-  AppstoreOutlined, 
+  BlockOutlined, 
   RightCircleOutlined, 
-  CheckCircleOutlined 
+  CheckCircleOutlined,
+  FolderOutlined
 } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
@@ -33,7 +34,8 @@ const nodeTypes = {
   end: EndNode,
   lpi: LPINode,
   agent: AgentNode,
-  common: CommonNode
+  common: CommonNode,
+  phase: PhaseNode
 };
 
 // 开始节点
@@ -58,6 +60,20 @@ function EndNode({ data }) {
         <CheckCircleOutlined className="node-icon" />
         <span>{data?.name || '结束节点'}</span>
       </div>
+    </div>
+  );
+}
+
+// 阶段节点
+function PhaseNode({ data }) {
+  return (
+    <div className="workflow-node phase-node">
+      <Handle type="target" position={Position.Top} />
+      <div className="node-content">
+        <FolderOutlined className="node-icon" />
+        <span>{data?.name || '阶段节点'}</span>
+      </div>
+      <Handle type="source" position={Position.Bottom} />
     </div>
   );
 }
@@ -99,7 +115,7 @@ function CommonNode({ data }) {
     <div className="workflow-node common-node">
       <Handle type="target" position={Position.Top} />
       <div className="node-content">
-        <AppstoreOutlined className="node-icon" />
+        <BlockOutlined className="node-icon" />
         <span>{data?.name || '通用组件节点'}</span>
       </div>
       <Handle type="source" position={Position.Bottom} />
@@ -271,12 +287,23 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
 
   // 添加节点
   const addNode = (type) => {
+    let nodeName = '';
+    switch(type) {
+      case 'start': nodeName = '开始节点'; break;
+      case 'end': nodeName = '结束节点'; break;
+      case 'phase': nodeName = '新阶段'; break;
+      case 'lpi': nodeName = '新LPI'; break;
+      case 'agent': nodeName = '新Agent'; break;
+      case 'common': nodeName = '新组件'; break;
+      default: nodeName = '新节点';
+    }
+    
     const newNode = {
       id: `node_${Date.now()}`,
       type,
       position: { x: 250, y: 250 },
       data: { 
-        name: `新${type}节点`,
+        name: nodeName,
         id: `node_${Date.now()}`
       }
     };
@@ -844,6 +871,7 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
                 <div className="workflow-tools">
                   <Button onClick={() => addNode('start')}>添加开始节点</Button>
                   <Button onClick={() => addNode('end')}>添加结束节点</Button>
+                  <Button onClick={() => addNode('phase')}>添加阶段节点</Button>
                   <Button onClick={deleteNode} disabled={!selectedNode}>删除选中节点</Button>
                 </div>
 

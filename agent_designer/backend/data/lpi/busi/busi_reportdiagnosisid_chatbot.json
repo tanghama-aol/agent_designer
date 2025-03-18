@@ -1,0 +1,9 @@
+{
+  "id": "ebd8f9aa-a3e6-4d32-b948-f256e7187016",
+  "name": "报告诊断id到chatbot",
+  "description": "报告诊断id到chatbot",
+  "english_description": "报告诊断id到chatbot",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_reportdiagnosisid_chatbot"
+}

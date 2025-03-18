@@ -1,0 +1,9 @@
+{
+  "id": "9e8a0d37-8272-4be9-b838-935fc2f2eda9",
+  "name": "恢复方案仿真",
+  "description": "恢复方案仿真",
+  "english_description": "恢复方案仿真",
+  "type": "business",
+  "category": "业务恢复Agent",
+  "filename": "busi_recoverysolutionsimulation"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "794baa92-54bf-4b7c-abe8-90e1c9a28e92",
+  "name": "恢复方案生成，支线：恢复方案仿真， 恢复方案执行",
+  "description": "恢复方案生成，支线：恢复方案仿真， 恢复方案执行",
+  "english_description": "恢复方案生成，支线：恢复方案仿真， 恢复方案执行",
+  "type": "business",
+  "category": "业务恢复Agent",
+  "filename": "busi_recoverysolutiongenerate_recoverysolutionsimulation_recoverysolutionexecution"
+}

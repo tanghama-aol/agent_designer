@@ -1,0 +1,9 @@
+{
+  "id": "9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc",
+  "name": "故障诊断",
+  "description": "故障诊断",
+  "english_description": "故障诊断",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_faultdiagnosis"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "fa171de6-82b8-4a04-a50c-464601250bf0",
+  "name": "故障修复Agent",
+  "description": "故障修复Agent专家",
+  "english_description": "故障修复Agent Expert Agent",
+  "type": "expert",
+  "category": "故障闭环场景Agent",
+  "phases": [
+    "af8a183a-758e-4614-be2b-ede8510c3e74",
+    "0f0abc98-b6a1-46a8-8482-287008971bad",
+    "50a6f315-74c9-46b8-8b1a-69b5219dcd76"
+  ],
+  "filename": "expert_faultrepairagent"
+}

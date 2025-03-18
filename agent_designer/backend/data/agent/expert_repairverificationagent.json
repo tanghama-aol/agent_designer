@@ -1,0 +1,12 @@
+{
+  "id": "bafed689-5d5a-4d0a-bb38-d254e51af0e6",
+  "name": "修复验证Agent",
+  "description": "修复验证Agent专家",
+  "english_description": "修复验证Agent Expert Agent",
+  "type": "expert",
+  "category": "故障闭环场景Agent",
+  "phases": [
+    "9bd5613b-a0ff-4dd8-9ced-d1c639aa1e99"
+  ],
+  "filename": "expert_repairverificationagent"
+}

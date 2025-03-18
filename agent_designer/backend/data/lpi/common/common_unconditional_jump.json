@@ -1,0 +1,9 @@
+{
+  "id": "98250208-0583-486a-8b30-7d28eee782bc",
+  "name": "无条件跳转",
+  "description": "无条件跳转到指定位置",
+  "english_description": "Unconditional Jump",
+  "type": "common",
+  "category": "控制流",
+  "filename": "common_unconditional_jump"
+} 

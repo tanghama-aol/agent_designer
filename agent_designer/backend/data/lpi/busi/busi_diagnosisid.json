@@ -1,0 +1,9 @@
+{
+  "id": "b9bde96c-82bb-4fef-b1c4-ce12ecfecb42",
+  "name": "没有诊断id，返回失败",
+  "description": "没有诊断id，返回失败",
+  "english_description": "没有诊断id，返回失败",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_diagnosisid"
+}

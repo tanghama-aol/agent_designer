@@ -1,0 +1,9 @@
+{
+  "id": "339b5a79-cd0f-4e4b-8ddc-063093c05c09",
+  "name": "故障记忆",
+  "description": "故障记忆",
+  "english_description": "故障记忆",
+  "type": "business",
+  "category": "故障总结Agent",
+  "filename": "busi_fault"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "cdf3465a-7408-4753-bc9e-843b9c03cb60",
+  "name": "故障闭环场景Agent",
+  "description": "故障闭环场景Agent场景",
+  "type": "scenario",
+  "expert_agents": [
+    "86c26c99-de48-4b0a-8904-c0e589c100ef",
+    "7675b6b1-dd02-48e5-b981-d26f465e8791",
+    "fa171de6-82b8-4a04-a50c-464601250bf0",
+    "bafed689-5d5a-4d0a-bb38-d254e51af0e6",
+    "5b34d8b6-bc05-43a8-9ea4-eeb54f217ed2"
+  ],
+  "filename": "scenario_faultclosed_loopscenarioagent"
+}

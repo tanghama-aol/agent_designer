@@ -1,0 +1,9 @@
+{
+  "id": "149ff086-6df3-41aa-9a3e-d4093d8893db",
+  "name": "处理恢复结果",
+  "description": "处理恢复结果",
+  "english_description": "处理恢复结果",
+  "type": "business",
+  "category": "业务恢复Agent",
+  "filename": "busi_recovery"
+}

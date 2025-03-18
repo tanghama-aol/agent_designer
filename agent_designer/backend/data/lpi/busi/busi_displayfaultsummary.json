@@ -1,0 +1,9 @@
+{
+  "id": "e9e3e2d1-5646-42ac-bbf9-2713783cbe81",
+  "name": "显示故障总结",
+  "description": "显示故障总结",
+  "english_description": "显示故障总结",
+  "type": "business",
+  "category": "故障总结Agent",
+  "filename": "busi_displayfaultsummary"
+}

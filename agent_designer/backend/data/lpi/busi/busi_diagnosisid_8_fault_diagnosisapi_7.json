@@ -1,0 +1,9 @@
+{
+  "id": "902f4ab7-a1d5-4f5d-af27-a38748461d69",
+  "name": "判断结果：有诊断id, 跳转8， 没有对应此故障类型诊断API，跳转7",
+  "description": "判断结果：有诊断id, 跳转8， 没有对应此故障类型诊断API，跳转7",
+  "english_description": "判断结果：有诊断id, 跳转8， 没有对应此故障类型诊断API，跳转7",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_diagnosisid_8_fault_diagnosisapi_7"
+}

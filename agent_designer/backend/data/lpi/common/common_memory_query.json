@@ -1,0 +1,9 @@
+{
+  "id": "6e384f5a-7a7a-4573-89d4-51f0e9d6adcf",
+  "name": "记忆查询",
+  "description": "查询系统记忆中的数据",
+  "english_description": "Memory Query",
+  "type": "common",
+  "category": "记忆操作",
+  "filename": "common_memory_query"
+} 

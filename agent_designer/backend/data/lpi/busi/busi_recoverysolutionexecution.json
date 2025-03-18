@@ -1,0 +1,9 @@
+{
+  "id": "6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439",
+  "name": "恢复方案执行",
+  "description": "恢复方案执行",
+  "english_description": "恢复方案执行",
+  "type": "business",
+  "category": "业务恢复Agent",
+  "filename": "busi_recoverysolutionexecution"
+}

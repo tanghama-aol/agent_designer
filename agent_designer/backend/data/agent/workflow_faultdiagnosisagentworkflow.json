@@ -1,0 +1,464 @@
+{
+  "id": "db2af4e0-81ad-4421-a2d6-52ce8b09708d",
+  "name": "故障诊断Agent工作流",
+  "description": "故障诊断Agent的执行流程",
+  "agent_id": "86c26c99-de48-4b0a-8904-c0e589c100ef",
+  "phases": [
+    {
+      "id": "9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "name": "主流程",
+      "full_name": "故障诊断.主流程",
+      "tasks": [
+        {
+          "id": "5aed98ef-5652-425b-89ea-6bddd06d458e",
+          "name": "是否是思维链指导说明",
+          "type": "lpi",
+          "filename": "busi_chain_of_thought"
+        },
+        {
+          "id": "f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96",
+          "name": "判断结果：是，跳转3， 否，跳转5",
+          "type": "lpi",
+          "filename": "common_conditional_jump"
+        },
+        {
+          "id": "4cb47b66-60be-49b6-942c-6c84b806f0d0",
+          "name": "生成思维链并执行",
+          "type": "lpi",
+          "filename": "busi_generatechain_of_thought_execution"
+        },
+        {
+          "id": "98250208-0583-486a-8b30-7d28eee782bc",
+          "name": "跳转6",
+          "type": "lpi",
+          "filename": "common_unconditional_jump"
+        },
+        {
+          "id": "9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc",
+          "name": "故障诊断",
+          "type": "lpi",
+          "filename": "busi_faultdiagnosis"
+        },
+        {
+          "id": "902f4ab7-a1d5-4f5d-af27-a38748461d69",
+          "name": "判断结果：有诊断id, 跳转8， 没有对应此故障类型诊断API，跳转7",
+          "type": "lpi",
+          "filename": "busi_diagnosisid_8_fault_diagnosisapi_7"
+        },
+        {
+          "id": "06fd8217-c28b-47d6-aa69-4f9184607d69",
+          "name": "生成并执行智能诊断方案",
+          "type": "lpi",
+          "filename": "busi_generate_executionintelligentdiagnosissolution"
+        },
+        {
+          "id": "b9bde96c-82bb-4fef-b1c4-ce12ecfecb42",
+          "name": "没有诊断id，返回失败",
+          "type": "lpi",
+          "filename": "busi_diagnosisid"
+        },
+        {
+          "id": "ebd8f9aa-a3e6-4d32-b948-f256e7187016",
+          "name": "报告诊断id到chatbot",
+          "type": "lpi",
+          "filename": "busi_reportdiagnosisid_chatbot"
+        },
+        {
+          "id": "e8f8ad1d-e888-474b-a6bc-bf5feb472bf5",
+          "name": "处理诊断过程结果，支线：跳转故障诊断.诊断报告， 故障诊断.相似案例，业务恢复，故障修复）",
+          "type": "lpi",
+          "filename": "busi_diagnosis_faultdiagnosis_diagnosisreport_faultdiagnosis_similarcase_businessrecovery_faultrepair"
+        },
+        {
+          "id": "d481a830-96e6-489c-a237-587b57c89ca1",
+          "name": "执行下一步业务恢复Agent，故障修复Agent",
+          "type": "lpi",
+          "filename": "common_next_step"
+        }
+      ]
+    },
+    {
+      "id": "97cc9206-e4e4-48a8-96ca-c8bfe47c4669",
+      "name": "诊断报告",
+      "full_name": "故障诊断.诊断报告",
+      "tasks": [
+        {
+          "id": "89428111-7d29-498d-9320-a61a543d1311",
+          "name": "显示诊断报告下载",
+          "type": "lpi",
+          "filename": "busi_displaydiagnosisreportdownload"
+        }
+      ]
+    },
+    {
+      "id": "65035405-6481-4483-a887-33db28ec8f57",
+      "name": "相似案例",
+      "full_name": "故障诊断.相似案例",
+      "tasks": [
+        {
+          "id": "69128959-4aac-4f14-b1ac-07f89d06a151",
+          "name": "显示相似案例",
+          "type": "lpi",
+          "filename": "busi_displaysimilarcase"
+        }
+      ]
+    }
+  ],
+  "filename": "workflow_faultdiagnosisagentworkflow",
+  "nodes": [
+    {
+      "id": "start",
+      "type": "start",
+      "position": {
+        "x": 50,
+        "y": 50
+      },
+      "data": {
+        "name": "开始"
+      }
+    },
+    {
+      "id": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "type": "phase",
+      "position": {
+        "x": 350,
+        "y": 50
+      },
+      "data": {
+        "name": "主流程"
+      }
+    },
+    {
+      "id": "task_5aed98ef-5652-425b-89ea-6bddd06d458e",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 150
+      },
+      "data": {
+        "name": "是否是思维链指导说明",
+        "component_id": "5aed98ef-5652-425b-89ea-6bddd06d458e",
+        "id": "task_5aed98ef-5652-425b-89ea-6bddd06d458e"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 230
+      },
+      "data": {
+        "name": "判断结果：是，跳转3， 否，跳转5",
+        "component_id": "f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96",
+        "id": "task_f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_4cb47b66-60be-49b6-942c-6c84b806f0d0",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 310
+      },
+      "data": {
+        "name": "生成思维链并执行",
+        "component_id": "4cb47b66-60be-49b6-942c-6c84b806f0d0",
+        "id": "task_4cb47b66-60be-49b6-942c-6c84b806f0d0"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_98250208-0583-486a-8b30-7d28eee782bc",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 390
+      },
+      "data": {
+        "name": "跳转6",
+        "component_id": "98250208-0583-486a-8b30-7d28eee782bc",
+        "id": "task_98250208-0583-486a-8b30-7d28eee782bc"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 470
+      },
+      "data": {
+        "name": "故障诊断",
+        "component_id": "9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc",
+        "id": "task_9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_902f4ab7-a1d5-4f5d-af27-a38748461d69",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 550
+      },
+      "data": {
+        "name": "判断结果：有诊断id, 跳转8， 没有对应此故障类型诊断API，跳转7",
+        "component_id": "902f4ab7-a1d5-4f5d-af27-a38748461d69",
+        "id": "task_902f4ab7-a1d5-4f5d-af27-a38748461d69"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_06fd8217-c28b-47d6-aa69-4f9184607d69",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 630
+      },
+      "data": {
+        "name": "生成并执行智能诊断方案",
+        "component_id": "06fd8217-c28b-47d6-aa69-4f9184607d69",
+        "id": "task_06fd8217-c28b-47d6-aa69-4f9184607d69"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_b9bde96c-82bb-4fef-b1c4-ce12ecfecb42",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 710
+      },
+      "data": {
+        "name": "没有诊断id，返回失败",
+        "component_id": "b9bde96c-82bb-4fef-b1c4-ce12ecfecb42",
+        "id": "task_b9bde96c-82bb-4fef-b1c4-ce12ecfecb42"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_ebd8f9aa-a3e6-4d32-b948-f256e7187016",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 790
+      },
+      "data": {
+        "name": "报告诊断id到chatbot",
+        "component_id": "ebd8f9aa-a3e6-4d32-b948-f256e7187016",
+        "id": "task_ebd8f9aa-a3e6-4d32-b948-f256e7187016"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_e8f8ad1d-e888-474b-a6bc-bf5feb472bf5",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 870
+      },
+      "data": {
+        "name": "处理诊断过程结果，支线：跳转故障诊断.诊断报告， 故障诊断.相似案例，业务恢复，故障修复）",
+        "component_id": "e8f8ad1d-e888-474b-a6bc-bf5feb472bf5",
+        "id": "task_e8f8ad1d-e888-474b-a6bc-bf5feb472bf5"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "task_d481a830-96e6-489c-a237-587b57c89ca1",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 950
+      },
+      "data": {
+        "name": "执行下一步业务恢复Agent，故障修复Agent",
+        "component_id": "d481a830-96e6-489c-a237-587b57c89ca1",
+        "id": "task_d481a830-96e6-489c-a237-587b57c89ca1"
+      },
+      "parentNode": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "extent": "parent"
+    },
+    {
+      "id": "phase_97cc9206-e4e4-48a8-96ca-c8bfe47c4669",
+      "type": "phase",
+      "position": {
+        "x": 650,
+        "y": 50
+      },
+      "data": {
+        "name": "诊断报告"
+      }
+    },
+    {
+      "id": "task_89428111-7d29-498d-9320-a61a543d1311",
+      "type": "lpi",
+      "position": {
+        "x": 650,
+        "y": 150
+      },
+      "data": {
+        "name": "显示诊断报告下载",
+        "component_id": "89428111-7d29-498d-9320-a61a543d1311",
+        "id": "task_89428111-7d29-498d-9320-a61a543d1311"
+      },
+      "parentNode": "phase_97cc9206-e4e4-48a8-96ca-c8bfe47c4669",
+      "extent": "parent"
+    },
+    {
+      "id": "phase_65035405-6481-4483-a887-33db28ec8f57",
+      "type": "phase",
+      "position": {
+        "x": 950,
+        "y": 50
+      },
+      "data": {
+        "name": "相似案例"
+      }
+    },
+    {
+      "id": "task_69128959-4aac-4f14-b1ac-07f89d06a151",
+      "type": "lpi",
+      "position": {
+        "x": 950,
+        "y": 150
+      },
+      "data": {
+        "name": "显示相似案例",
+        "component_id": "69128959-4aac-4f14-b1ac-07f89d06a151",
+        "id": "task_69128959-4aac-4f14-b1ac-07f89d06a151"
+      },
+      "parentNode": "phase_65035405-6481-4483-a887-33db28ec8f57",
+      "extent": "parent"
+    },
+    {
+      "id": "end",
+      "type": "end",
+      "position": {
+        "x": 1250,
+        "y": 50
+      },
+      "data": {
+        "name": "结束"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_start_to_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "source": "start",
+      "target": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_9beea795-8d4d-4d5d-8242-4aa930390dd7_to_5aed98ef-5652-425b-89ea-6bddd06d458e",
+      "source": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "target": "task_5aed98ef-5652-425b-89ea-6bddd06d458e",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_5aed98ef-5652-425b-89ea-6bddd06d458e_to_f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96",
+      "source": "task_5aed98ef-5652-425b-89ea-6bddd06d458e",
+      "target": "task_f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96_to_4cb47b66-60be-49b6-942c-6c84b806f0d0",
+      "source": "task_f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96",
+      "target": "task_4cb47b66-60be-49b6-942c-6c84b806f0d0",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_4cb47b66-60be-49b6-942c-6c84b806f0d0_to_98250208-0583-486a-8b30-7d28eee782bc",
+      "source": "task_4cb47b66-60be-49b6-942c-6c84b806f0d0",
+      "target": "task_98250208-0583-486a-8b30-7d28eee782bc",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_98250208-0583-486a-8b30-7d28eee782bc_to_9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc",
+      "source": "task_98250208-0583-486a-8b30-7d28eee782bc",
+      "target": "task_9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc_to_902f4ab7-a1d5-4f5d-af27-a38748461d69",
+      "source": "task_9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc",
+      "target": "task_902f4ab7-a1d5-4f5d-af27-a38748461d69",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_902f4ab7-a1d5-4f5d-af27-a38748461d69_to_06fd8217-c28b-47d6-aa69-4f9184607d69",
+      "source": "task_902f4ab7-a1d5-4f5d-af27-a38748461d69",
+      "target": "task_06fd8217-c28b-47d6-aa69-4f9184607d69",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_06fd8217-c28b-47d6-aa69-4f9184607d69_to_b9bde96c-82bb-4fef-b1c4-ce12ecfecb42",
+      "source": "task_06fd8217-c28b-47d6-aa69-4f9184607d69",
+      "target": "task_b9bde96c-82bb-4fef-b1c4-ce12ecfecb42",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_b9bde96c-82bb-4fef-b1c4-ce12ecfecb42_to_ebd8f9aa-a3e6-4d32-b948-f256e7187016",
+      "source": "task_b9bde96c-82bb-4fef-b1c4-ce12ecfecb42",
+      "target": "task_ebd8f9aa-a3e6-4d32-b948-f256e7187016",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_ebd8f9aa-a3e6-4d32-b948-f256e7187016_to_e8f8ad1d-e888-474b-a6bc-bf5feb472bf5",
+      "source": "task_ebd8f9aa-a3e6-4d32-b948-f256e7187016",
+      "target": "task_e8f8ad1d-e888-474b-a6bc-bf5feb472bf5",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_e8f8ad1d-e888-474b-a6bc-bf5feb472bf5_to_d481a830-96e6-489c-a237-587b57c89ca1",
+      "source": "task_e8f8ad1d-e888-474b-a6bc-bf5feb472bf5",
+      "target": "task_d481a830-96e6-489c-a237-587b57c89ca1",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_9beea795-8d4d-4d5d-8242-4aa930390dd7_to_97cc9206-e4e4-48a8-96ca-c8bfe47c4669",
+      "source": "phase_9beea795-8d4d-4d5d-8242-4aa930390dd7",
+      "target": "phase_97cc9206-e4e4-48a8-96ca-c8bfe47c4669",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_97cc9206-e4e4-48a8-96ca-c8bfe47c4669_to_89428111-7d29-498d-9320-a61a543d1311",
+      "source": "phase_97cc9206-e4e4-48a8-96ca-c8bfe47c4669",
+      "target": "task_89428111-7d29-498d-9320-a61a543d1311",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_97cc9206-e4e4-48a8-96ca-c8bfe47c4669_to_65035405-6481-4483-a887-33db28ec8f57",
+      "source": "phase_97cc9206-e4e4-48a8-96ca-c8bfe47c4669",
+      "target": "phase_65035405-6481-4483-a887-33db28ec8f57",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_65035405-6481-4483-a887-33db28ec8f57_to_69128959-4aac-4f14-b1ac-07f89d06a151",
+      "source": "phase_65035405-6481-4483-a887-33db28ec8f57",
+      "target": "task_69128959-4aac-4f14-b1ac-07f89d06a151",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_65035405-6481-4483-a887-33db28ec8f57_to_end",
+      "source": "phase_65035405-6481-4483-a887-33db28ec8f57",
+      "target": "end",
+      "type": "smoothstep"
+    }
+  ]
+}

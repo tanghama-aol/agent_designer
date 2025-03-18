@@ -1,0 +1,9 @@
+{
+  "id": "3d864c06-addd-46e2-9084-fcbd500fc894",
+  "name": "修复方案仿真",
+  "description": "修复方案仿真",
+  "english_description": "修复方案仿真",
+  "type": "business",
+  "category": "故障修复Agent",
+  "filename": "busi_repairsolutionsimulation"
+}

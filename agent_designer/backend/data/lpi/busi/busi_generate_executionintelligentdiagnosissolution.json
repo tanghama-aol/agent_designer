@@ -1,0 +1,9 @@
+{
+  "id": "06fd8217-c28b-47d6-aa69-4f9184607d69",
+  "name": "生成并执行智能诊断方案",
+  "description": "生成并执行智能诊断方案",
+  "english_description": "生成并执行智能诊断方案",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_generate_executionintelligentdiagnosissolution"
+}

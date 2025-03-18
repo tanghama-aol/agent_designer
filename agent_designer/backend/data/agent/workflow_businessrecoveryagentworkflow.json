@@ -1,0 +1,329 @@
+{
+  "id": "9fc62144-4fa3-460a-9a7e-1409b1d81c43",
+  "name": "业务恢复Agent工作流",
+  "description": "业务恢复Agent的执行流程",
+  "agent_id": "7675b6b1-dd02-48e5-b981-d26f465e8791",
+  "phases": [
+    {
+      "id": "688a475d-830b-4b45-b361-97750bd95051",
+      "name": "主流程",
+      "full_name": "业务恢复.主流程",
+      "tasks": [
+        {
+          "id": "794baa92-54bf-4b7c-abe8-90e1c9a28e92",
+          "name": "恢复方案生成，支线：恢复方案仿真， 恢复方案执行",
+          "type": "lpi",
+          "filename": "busi_recoverysolutiongenerate_recoverysolutionsimulation_recoverysolutionexecution"
+        },
+        {
+          "id": "ec7a9758-16b8-4477-8823-8268b47ca970",
+          "name": "用户介入",
+          "type": "lpi",
+          "filename": "common_user_intervention"
+        }
+      ]
+    },
+    {
+      "id": "43e840f9-73b8-42e2-a315-d2c120eaf306",
+      "name": "恢复方案仿真",
+      "full_name": "业务恢复.恢复方案仿真",
+      "tasks": [
+        {
+          "id": "9e8a0d37-8272-4be9-b838-935fc2f2eda9",
+          "name": "恢复方案仿真",
+          "type": "lpi",
+          "filename": "busi_recoverysolutionsimulation"
+        },
+        {
+          "id": "ac971ada-1c8f-4cbf-865b-eb464522a677",
+          "name": "用户介入",
+          "type": "lpi",
+          "filename": "common_user_intervention"
+        }
+      ]
+    },
+    {
+      "id": "a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "name": "恢复方案执行",
+      "full_name": "业务恢复.恢复方案执行",
+      "tasks": [
+        {
+          "id": "6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439",
+          "name": "恢复方案执行",
+          "type": "lpi",
+          "filename": "busi_recoverysolutionexecution"
+        },
+        {
+          "id": "149ff086-6df3-41aa-9a3e-d4093d8893db",
+          "name": "处理恢复结果",
+          "type": "lpi",
+          "filename": "busi_recovery"
+        },
+        {
+          "id": "73143a23-f7b4-47ac-9154-7158ab400c1e",
+          "name": "用户介入",
+          "type": "lpi",
+          "filename": "common_user_intervention"
+        },
+        {
+          "id": "69bc0b65-c3f0-41d7-a06d-1a05367d914e",
+          "name": "下一步修复验证Agent",
+          "type": "lpi",
+          "filename": "busi_repairverificationagent"
+        }
+      ]
+    }
+  ],
+  "filename": "workflow_businessrecoveryagentworkflow",
+  "nodes": [
+    {
+      "id": "start",
+      "type": "start",
+      "position": {
+        "x": 50,
+        "y": 50
+      },
+      "data": {
+        "name": "开始"
+      }
+    },
+    {
+      "id": "phase_688a475d-830b-4b45-b361-97750bd95051",
+      "type": "phase",
+      "position": {
+        "x": 350,
+        "y": 50
+      },
+      "data": {
+        "name": "主流程"
+      }
+    },
+    {
+      "id": "task_794baa92-54bf-4b7c-abe8-90e1c9a28e92",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 150
+      },
+      "data": {
+        "name": "恢复方案生成，支线：恢复方案仿真， 恢复方案执行",
+        "component_id": "794baa92-54bf-4b7c-abe8-90e1c9a28e92",
+        "id": "task_794baa92-54bf-4b7c-abe8-90e1c9a28e92"
+      },
+      "parentNode": "phase_688a475d-830b-4b45-b361-97750bd95051",
+      "extent": "parent"
+    },
+    {
+      "id": "task_ec7a9758-16b8-4477-8823-8268b47ca970",
+      "type": "lpi",
+      "position": {
+        "x": 350,
+        "y": 230
+      },
+      "data": {
+        "name": "用户介入",
+        "component_id": "ec7a9758-16b8-4477-8823-8268b47ca970",
+        "id": "task_ec7a9758-16b8-4477-8823-8268b47ca970"
+      },
+      "parentNode": "phase_688a475d-830b-4b45-b361-97750bd95051",
+      "extent": "parent"
+    },
+    {
+      "id": "phase_43e840f9-73b8-42e2-a315-d2c120eaf306",
+      "type": "phase",
+      "position": {
+        "x": 650,
+        "y": 50
+      },
+      "data": {
+        "name": "恢复方案仿真"
+      }
+    },
+    {
+      "id": "task_9e8a0d37-8272-4be9-b838-935fc2f2eda9",
+      "type": "lpi",
+      "position": {
+        "x": 650,
+        "y": 150
+      },
+      "data": {
+        "name": "恢复方案仿真",
+        "component_id": "9e8a0d37-8272-4be9-b838-935fc2f2eda9",
+        "id": "task_9e8a0d37-8272-4be9-b838-935fc2f2eda9"
+      },
+      "parentNode": "phase_43e840f9-73b8-42e2-a315-d2c120eaf306",
+      "extent": "parent"
+    },
+    {
+      "id": "task_ac971ada-1c8f-4cbf-865b-eb464522a677",
+      "type": "lpi",
+      "position": {
+        "x": 650,
+        "y": 230
+      },
+      "data": {
+        "name": "用户介入",
+        "component_id": "ac971ada-1c8f-4cbf-865b-eb464522a677",
+        "id": "task_ac971ada-1c8f-4cbf-865b-eb464522a677"
+      },
+      "parentNode": "phase_43e840f9-73b8-42e2-a315-d2c120eaf306",
+      "extent": "parent"
+    },
+    {
+      "id": "phase_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "type": "phase",
+      "position": {
+        "x": 950,
+        "y": 50
+      },
+      "data": {
+        "name": "恢复方案执行"
+      }
+    },
+    {
+      "id": "task_6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439",
+      "type": "lpi",
+      "position": {
+        "x": 950,
+        "y": 150
+      },
+      "data": {
+        "name": "恢复方案执行",
+        "component_id": "6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439",
+        "id": "task_6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439"
+      },
+      "parentNode": "phase_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "extent": "parent"
+    },
+    {
+      "id": "task_149ff086-6df3-41aa-9a3e-d4093d8893db",
+      "type": "lpi",
+      "position": {
+        "x": 950,
+        "y": 230
+      },
+      "data": {
+        "name": "处理恢复结果",
+        "component_id": "149ff086-6df3-41aa-9a3e-d4093d8893db",
+        "id": "task_149ff086-6df3-41aa-9a3e-d4093d8893db"
+      },
+      "parentNode": "phase_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "extent": "parent"
+    },
+    {
+      "id": "task_73143a23-f7b4-47ac-9154-7158ab400c1e",
+      "type": "lpi",
+      "position": {
+        "x": 950,
+        "y": 310
+      },
+      "data": {
+        "name": "用户介入",
+        "component_id": "73143a23-f7b4-47ac-9154-7158ab400c1e",
+        "id": "task_73143a23-f7b4-47ac-9154-7158ab400c1e"
+      },
+      "parentNode": "phase_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "extent": "parent"
+    },
+    {
+      "id": "task_69bc0b65-c3f0-41d7-a06d-1a05367d914e",
+      "type": "lpi",
+      "position": {
+        "x": 950,
+        "y": 390
+      },
+      "data": {
+        "name": "下一步修复验证Agent",
+        "component_id": "69bc0b65-c3f0-41d7-a06d-1a05367d914e",
+        "id": "task_69bc0b65-c3f0-41d7-a06d-1a05367d914e"
+      },
+      "parentNode": "phase_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "extent": "parent"
+    },
+    {
+      "id": "end",
+      "type": "end",
+      "position": {
+        "x": 1250,
+        "y": 50
+      },
+      "data": {
+        "name": "结束"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_start_to_688a475d-830b-4b45-b361-97750bd95051",
+      "source": "start",
+      "target": "phase_688a475d-830b-4b45-b361-97750bd95051",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_688a475d-830b-4b45-b361-97750bd95051_to_794baa92-54bf-4b7c-abe8-90e1c9a28e92",
+      "source": "phase_688a475d-830b-4b45-b361-97750bd95051",
+      "target": "task_794baa92-54bf-4b7c-abe8-90e1c9a28e92",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_794baa92-54bf-4b7c-abe8-90e1c9a28e92_to_ec7a9758-16b8-4477-8823-8268b47ca970",
+      "source": "task_794baa92-54bf-4b7c-abe8-90e1c9a28e92",
+      "target": "task_ec7a9758-16b8-4477-8823-8268b47ca970",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_688a475d-830b-4b45-b361-97750bd95051_to_43e840f9-73b8-42e2-a315-d2c120eaf306",
+      "source": "phase_688a475d-830b-4b45-b361-97750bd95051",
+      "target": "phase_43e840f9-73b8-42e2-a315-d2c120eaf306",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_43e840f9-73b8-42e2-a315-d2c120eaf306_to_9e8a0d37-8272-4be9-b838-935fc2f2eda9",
+      "source": "phase_43e840f9-73b8-42e2-a315-d2c120eaf306",
+      "target": "task_9e8a0d37-8272-4be9-b838-935fc2f2eda9",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_9e8a0d37-8272-4be9-b838-935fc2f2eda9_to_ac971ada-1c8f-4cbf-865b-eb464522a677",
+      "source": "task_9e8a0d37-8272-4be9-b838-935fc2f2eda9",
+      "target": "task_ac971ada-1c8f-4cbf-865b-eb464522a677",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_43e840f9-73b8-42e2-a315-d2c120eaf306_to_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "source": "phase_43e840f9-73b8-42e2-a315-d2c120eaf306",
+      "target": "phase_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64_to_6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439",
+      "source": "phase_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "target": "task_6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439_to_149ff086-6df3-41aa-9a3e-d4093d8893db",
+      "source": "task_6f2cbd8b-74e7-41fe-8bc9-4c6c33a4b439",
+      "target": "task_149ff086-6df3-41aa-9a3e-d4093d8893db",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_149ff086-6df3-41aa-9a3e-d4093d8893db_to_73143a23-f7b4-47ac-9154-7158ab400c1e",
+      "source": "task_149ff086-6df3-41aa-9a3e-d4093d8893db",
+      "target": "task_73143a23-f7b4-47ac-9154-7158ab400c1e",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_73143a23-f7b4-47ac-9154-7158ab400c1e_to_69bc0b65-c3f0-41d7-a06d-1a05367d914e",
+      "source": "task_73143a23-f7b4-47ac-9154-7158ab400c1e",
+      "target": "task_69bc0b65-c3f0-41d7-a06d-1a05367d914e",
+      "type": "smoothstep"
+    },
+    {
+      "id": "edge_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64_to_end",
+      "source": "phase_a85e49b7-2bf8-4a6d-8bfc-c2b33df86e64",
+      "target": "end",
+      "type": "smoothstep"
+    }
+  ]
+}

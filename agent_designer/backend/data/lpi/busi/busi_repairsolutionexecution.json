@@ -1,0 +1,9 @@
+{
+  "id": "ac8b8157-da6f-4bcf-b088-5840df121a7f",
+  "name": "修复方案执行",
+  "description": "修复方案执行",
+  "english_description": "修复方案执行",
+  "type": "business",
+  "category": "故障修复Agent",
+  "filename": "busi_repairsolutionexecution"
+}

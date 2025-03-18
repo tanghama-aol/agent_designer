@@ -1,0 +1,12 @@
+{
+  "id": "5b34d8b6-bc05-43a8-9ea4-eeb54f217ed2",
+  "name": "故障总结Agent",
+  "description": "故障总结Agent专家",
+  "english_description": "故障总结Agent Expert Agent",
+  "type": "expert",
+  "category": "故障闭环场景Agent",
+  "phases": [
+    "871a9ca4-8f1c-4538-89a0-66192b511417"
+  ],
+  "filename": "expert_faultsummaryagent"
+}

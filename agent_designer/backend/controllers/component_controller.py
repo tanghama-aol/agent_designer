@@ -6,10 +6,10 @@ from services.component_service import (
     create_lpi, update_lpi, 
     create_agent, update_agent,
     create_common_component, update_common_component,
-    delete_component
+    delete_component, component_service
 )
 
-component_bp = Blueprint('component', __name__)
+component_bp = Blueprint('component', __name__, url_prefix='/api/component')
 
 @component_bp.route('/', methods=['GET'])
 def list_components():
@@ -28,14 +28,18 @@ def list_components():
     return jsonify([c.to_dict() for c in components])
 
 @component_bp.route('/tree', methods=['GET'])
-def get_tree():
-    tree = get_component_tree()
+def get_component_tree():
+    """获取组件树"""
+    tree = component_service.get_component_tree()
     return jsonify(tree)
 
-@component_bp.route('/<int:component_id>', methods=['GET'])
-def get_component(component_id):
-    detail = get_component_detail(component_id)
-    return jsonify(detail)
+@component_bp.route('/<component_type>/<component_id>', methods=['GET'])
+def get_component_detail(component_type, component_id):
+    """获取组件详情"""
+    detail = component_service.get_component_detail(component_id, component_type)
+    if detail:
+        return jsonify(detail)
+    return jsonify({'error': '未找到组件'}), 404
 
 @component_bp.route('/lpi', methods=['POST'])
 def create_lpi_component():
@@ -103,4 +107,31 @@ def export_component(component_id):
     if component.component_type == 'agent':
         export_data['workflows'] = [w.to_dict() for w in component.workflows]
     
-    return jsonify(export_data) 
+    return jsonify(export_data)
+
+@component_bp.route('/<component_type>/<component_id>', methods=['PUT'])
+def update_component(component_type, component_id):
+    """更新组件"""
+    data = request.json
+    success = component_service.update_component(component_id, component_type, data)
+    if success:
+        return jsonify({'message': '更新成功'})
+    return jsonify({'error': '更新失败'}), 400
+
+@component_bp.route('/workflow/<workflow_id>', methods=['PUT'])
+def update_workflow(workflow_id):
+    """更新工作流"""
+    data = request.json
+    success = component_service.update_workflow(workflow_id, data)
+    if success:
+        return jsonify({'message': '更新成功'})
+    return jsonify({'error': '更新失败'}), 400
+
+@component_bp.route('/workflow', methods=['POST'])
+def create_workflow():
+    """创建工作流"""
+    data = request.json
+    workflow = component_service.create_workflow(data)
+    if workflow:
+        return jsonify(workflow)
+    return jsonify({'error': '创建失败'}), 400 

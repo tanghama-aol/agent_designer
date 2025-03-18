@@ -1,0 +1,9 @@
+{
+  "id": "075a75e5-4247-4b2c-ad73-632a3bde5ad7",
+  "name": "结果展示",
+  "description": "展示结果信息",
+  "english_description": "Result Display",
+  "type": "common",
+  "category": "展示",
+  "filename": "common_result_display"
+}

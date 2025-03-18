@@ -1,0 +1,9 @@
+{
+  "id": "db369da0-2b4d-44d4-bc22-9daeec59658f",
+  "name": "修复方案生成，支线：修复方案仿真， 修复方案执行",
+  "description": "修复方案生成，支线：修复方案仿真， 修复方案执行",
+  "english_description": "修复方案生成，支线：修复方案仿真， 修复方案执行",
+  "type": "business",
+  "category": "故障修复Agent",
+  "filename": "busi_repairsolutiongenerate_repairsolutionsimulation_repairsolutionexecution"
+}

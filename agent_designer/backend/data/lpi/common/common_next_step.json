@@ -1,0 +1,9 @@
+{
+  "id": "d481a830-96e6-489c-a237-587b57c89ca1",
+  "name": "下一步",
+  "description": "执行下一个处理步骤",
+  "english_description": "Next Step",
+  "type": "common",
+  "category": "控制流",
+  "filename": "common_next_step"
+} 
