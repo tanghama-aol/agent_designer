@@ -8,11 +8,20 @@ import ReactFlow, {
   addEdge, 
   applyEdgeChanges, 
   applyNodeChanges,
-  Panel
+  Panel,
+  Handle,
+  Position
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './WorkflowEditor.css';
 import { updateAgent, createWorkflow, updateWorkflow, getComponentTree } from '../../services/componentService';
+import { 
+  RocketOutlined, 
+  ApiOutlined, 
+  AppstoreOutlined, 
+  RightCircleOutlined, 
+  CheckCircleOutlined 
+} from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -31,9 +40,11 @@ const nodeTypes = {
 function StartNode({ data }) {
   return (
     <div className="workflow-node start-node">
-      <div className="node-header">开始</div>
-      <div className="node-content">{data?.name || '开始节点'}</div>
-      <div className="react-flow__handle react-flow__handle-bottom" style={{ bottom: -8 }} data-handle-id="source" data-nodeid={data.id} />
+      <Handle type="source" position={Position.Bottom} />
+      <div className="node-content">
+        <RightCircleOutlined className="node-icon" />
+        <span>{data?.name || '开始节点'}</span>
+      </div>
     </div>
   );
 }
@@ -42,9 +53,11 @@ function StartNode({ data }) {
 function EndNode({ data }) {
   return (
     <div className="workflow-node end-node">
-      <div className="node-header">结束</div>
-      <div className="node-content">{data?.name || '结束节点'}</div>
-      <div className="react-flow__handle react-flow__handle-top" style={{ top: -8 }} data-handle-id="target" data-nodeid={data.id} />
+      <Handle type="target" position={Position.Top} />
+      <div className="node-content">
+        <CheckCircleOutlined className="node-icon" />
+        <span>{data?.name || '结束节点'}</span>
+      </div>
     </div>
   );
 }
@@ -53,13 +66,15 @@ function EndNode({ data }) {
 function LPINode({ data }) {
   return (
     <div className="workflow-node lpi-node">
-      <div className="node-header">LPI</div>
-      <div className="node-content">{data?.name || 'LPI节点'}</div>
+      <Handle type="target" position={Position.Top} />
+      <div className="node-content">
+        <ApiOutlined className="node-icon" />
+        <span>{data?.name || 'LPI节点'}</span>
+      </div>
       {data?.lpiCategory && (
         <div className="node-category">{data.lpiCategory}</div>
       )}
-      <div className="react-flow__handle react-flow__handle-top" style={{ top: -8 }} data-handle-id="target" data-nodeid={data.id} />
-      <div className="react-flow__handle react-flow__handle-bottom" style={{ bottom: -8 }} data-handle-id="source" data-nodeid={data.id} />
+      <Handle type="source" position={Position.Bottom} />
     </div>
   );
 }
@@ -68,10 +83,12 @@ function LPINode({ data }) {
 function AgentNode({ data }) {
   return (
     <div className="workflow-node agent-node">
-      <div className="node-header">Agent</div>
-      <div className="node-content">{data?.name || 'Agent节点'}</div>
-      <div className="react-flow__handle react-flow__handle-top" style={{ top: -8 }} data-handle-id="target" data-nodeid={data.id} />
-      <div className="react-flow__handle react-flow__handle-bottom" style={{ bottom: -8 }} data-handle-id="source" data-nodeid={data.id} />
+      <Handle type="target" position={Position.Top} />
+      <div className="node-content">
+        <RocketOutlined className="node-icon" />
+        <span>{data?.name || 'Agent节点'}</span>
+      </div>
+      <Handle type="source" position={Position.Bottom} />
     </div>
   );
 }
@@ -80,10 +97,12 @@ function AgentNode({ data }) {
 function CommonNode({ data }) {
   return (
     <div className="workflow-node common-node">
-      <div className="node-header">通用组件</div>
-      <div className="node-content">{data?.name || '通用组件节点'}</div>
-      <div className="react-flow__handle react-flow__handle-top" style={{ top: -8 }} data-handle-id="target" data-nodeid={data.id} />
-      <div className="react-flow__handle react-flow__handle-bottom" style={{ bottom: -8 }} data-handle-id="source" data-nodeid={data.id} />
+      <Handle type="target" position={Position.Top} />
+      <div className="node-content">
+        <AppstoreOutlined className="node-icon" />
+        <span>{data?.name || '通用组件节点'}</span>
+      </div>
+      <Handle type="source" position={Position.Bottom} />
     </div>
   );
 }
@@ -858,8 +877,12 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
                       fitView
                       defaultEdgeOptions={{ 
                         type: 'smoothstep', 
-                        animated: true,
-                        style: { stroke: '#1890ff', strokeWidth: 2 }
+                        animated: false,
+                        style: { stroke: '#1890ff', strokeWidth: 2 },
+                        markerEnd: {
+                          type: 'arrowclosed',
+                          color: '#1890ff'
+                        }
                       }}
                       connectionLineStyle={{ stroke: '#1890ff', strokeWidth: 2 }}
                       connectionLineType="smoothstep"
