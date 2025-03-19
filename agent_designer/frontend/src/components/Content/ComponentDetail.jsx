@@ -14,16 +14,16 @@ const ComponentDetail = ({ componentInfo, onRefreshTree }) => {
 
   useEffect(() => {
     if (componentInfo && componentInfo.id) {
-      fetchComponentDetail(componentInfo.id);
+      fetchComponentDetail(componentInfo.type, componentInfo.id);
     } else {
       setComponentDetail(null);
     }
   }, [componentInfo]);
 
-  const fetchComponentDetail = async (id) => {
+  const fetchComponentDetail = async (type, id) => {
     try {
       setLoading(true);
-      const data = await getComponentDetail(id);
+      const data = await getComponentDetail(type, id);
       setComponentDetail(data);
     } catch (error) {
       message.error('获取组件详情失败');
@@ -40,11 +40,11 @@ const ComponentDetail = ({ componentInfo, onRefreshTree }) => {
 
     switch (componentDetail.component_type || componentInfo?.type) {
       case 'lpi':
-        return <LPIDetail detail={componentDetail} onRefresh={() => fetchComponentDetail(componentInfo.id)} onRefreshTree={onRefreshTree} />;
+        return <LPIDetail detail={componentDetail} onRefresh={() => fetchComponentDetail(componentInfo.type, componentInfo.id)} onRefreshTree={onRefreshTree} />;
       case 'agent':
-        return <AgentDetail detail={componentDetail} onRefresh={() => fetchComponentDetail(componentInfo.id)} onRefreshTree={onRefreshTree} />;
+        return <AgentDetail detail={componentDetail} onRefresh={() => fetchComponentDetail(componentInfo.type, componentInfo.id)} onRefreshTree={onRefreshTree} />;
       case 'common':
-        return <CommonComponentDetail detail={componentDetail} onRefresh={() => fetchComponentDetail(componentInfo.id)} onRefreshTree={onRefreshTree} />;
+        return <CommonComponentDetail detail={componentDetail} onRefresh={() => fetchComponentDetail(componentInfo.type, componentInfo.id)} onRefreshTree={onRefreshTree} />;
       default:
         return <Empty description="未知组件类型" />;
     }

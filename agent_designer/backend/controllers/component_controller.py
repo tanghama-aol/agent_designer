@@ -1,13 +1,16 @@
 from flask import Blueprint, request, jsonify
 from models import db
 from models.component import Component
-from services.component_service import (
-    get_component_tree, get_component_detail, 
+from services.component_service import ( 
     create_lpi, update_lpi, 
     create_agent, update_agent,
     create_common_component, update_common_component,
     delete_component, component_service
 )
+
+#get_component_tree, get_component_detail,
+from services.component_service import ComponentService
+
 
 component_bp = Blueprint('component', __name__, url_prefix='/api/component')
 
@@ -30,13 +33,13 @@ def list_components():
 @component_bp.route('/tree', methods=['GET'])
 def get_component_tree():
     """获取组件树"""
-    tree = component_service.get_component_tree()
+    tree = ComponentService.get_component_tree()
     return jsonify(tree)
 
 @component_bp.route('/<component_type>/<component_id>', methods=['GET'])
 def get_component_detail(component_type, component_id):
     """获取组件详情"""
-    detail = component_service.get_component_detail(component_id, component_type)
+    detail = ComponentService.get_component_detail(component_id, component_type)
     if detail:
         return jsonify(detail)
     return jsonify({'error': '未找到组件'}), 404

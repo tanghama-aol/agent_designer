@@ -1,9 +1,0 @@
-{
-  "id": "47397926-1692-48c9-947e-625c52199fd0",
-  "name": "用户交互",
-  "description": "与用户进行交互",
-  "english_description": "User Interaction",
-  "type": "common",
-  "category": "交互",
-  "filename": "common_user_interaction"
-}

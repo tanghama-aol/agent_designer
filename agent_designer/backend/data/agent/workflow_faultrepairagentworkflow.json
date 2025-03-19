@@ -32,7 +32,7 @@
           "id": "c822ec20-82ff-4508-8d8c-3dfc9c37aacc",
           "name": "用户介入",
           "type": "lpi",
-          "filename": "common_user_intervention"
+          "filename": "busi_userintervention"
         }
       ]
     },
@@ -57,7 +57,7 @@
           "id": "b7217c31-9754-4871-9782-1949b15303f5",
           "name": "用户介入",
           "type": "lpi",
-          "filename": "common_user_intervention"
+          "filename": "busi_userintervention"
         },
         {
           "id": "e32dd3d5-2ed2-45a3-826b-a945315e6cff",

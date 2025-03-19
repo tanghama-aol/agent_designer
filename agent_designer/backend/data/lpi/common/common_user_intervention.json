@@ -1,9 +1,9 @@
 {
   "id": "0261a63d-bccd-40a8-8ba3-9af1e3d2169f",
   "name": "用户介入",
-  "description": "等待用户介入操作",
+  "description": "用户介入",
   "english_description": "User Intervention",
   "type": "common",
-  "category": "交互",
+  "category": "通用LPI",
   "filename": "common_user_intervention"
 } 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Select, Button, Card, Tabs, message, Popconfirm } from 'antd';
 import { SaveOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { updateCommonComponent } from '../../services/componentService';
@@ -13,24 +13,37 @@ const CommonComponentDetail = ({ detail, onRefresh, onRefreshTree }) => {
   const [componentSubtype, setComponentSubtype] = useState(detail?.component_subtype || 'condition');
   const [config, setConfig] = useState(detail?.config || {});
 
+  useEffect(() => {
+    if (detail) {
+      form.setFieldsValue({
+        name: detail.name,
+        description: detail.description,
+        english_description: detail.english_description,
+        type: detail.type,
+        category: detail.category,
+        // 其他字段...
+      });
+    }
+  }, [detail, form]);
+
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
       
       const updateData = {
-        ...values,
-        component_subtype: componentSubtype,
-        config: config
+        ...detail, // 保留原有数据
+        ...values, // 更新表单数据
+        type: 'common', // 确保类型正确
       };
       
       await updateCommonComponent(detail.id, updateData);
       message.success('通用组件保存成功');
-      onRefresh();
-      onRefreshTree();
+      if (onRefresh) onRefresh();
+      if (onRefreshTree) onRefreshTree();
     } catch (error) {
       console.error('保存失败:', error);
-      message.error('保存失败');
+      message.error('保存失败: ' + (error.message || '未知错误'));
     } finally {
       setLoading(false);
     }
@@ -202,84 +215,114 @@ const CommonComponentDetail = ({ detail, onRefresh, onRefreshTree }) => {
   };
 
   return (
-    <div>
-      <div className="detail-header">
-        <h2 className="detail-title">通用组件详情</h2>
-        <div className="detail-actions">
-          <Button 
-            type="primary" 
-            icon={<SaveOutlined />} 
-            onClick={handleSave}
-            loading={loading}
-          >
-            保存
-          </Button>
-        </div>
-      </div>
-
+    <div className="common-component-detail">
       <Form
         form={form}
         layout="vertical"
         initialValues={{
-          name: detail?.name || '',
-          description: detail?.description || '',
-          english_description: detail?.english_description || '',
-          category: detail?.category || ''
+          name: detail?.name,
+          description: detail?.description,
+          english_description: detail?.english_description,
+          type: detail?.type || 'common',
+          category: detail?.category,
         }}
       >
-        <Tabs defaultActiveKey="basic">
-          <TabPane tab="基本信息" key="basic">
-            <Form.Item
-              name="name"
-              label="组件名称"
-              rules={[{ required: true, message: '请输入组件名称' }]}
+        <Card
+          title="通用组件详情"
+          extra={
+            <Button
+              type="primary"
+              icon={<SaveOutlined />}
+              onClick={handleSave}
+              loading={loading}
             >
-              <Input placeholder="请输入组件名称" />
-            </Form.Item>
-
-            <Form.Item
-              name="description"
-              label="中文描述"
-              rules={[{ required: true, message: '请输入中文描述' }]}
-            >
-              <TextArea placeholder="请输入中文描述" rows={2} />
-            </Form.Item>
-
-            <Form.Item
-              name="english_description"
-              label="英文描述"
-            >
-              <TextArea placeholder="请输入英文描述" rows={2} />
-            </Form.Item>
-
-            <Form.Item
-              name="category"
-              label="分类"
-            >
-              <Input placeholder="请输入分类" />
-            </Form.Item>
-          </TabPane>
-
-          <TabPane tab="组件配置" key="config">
-            <Form.Item
-              label="组件子类型"
-              rules={[{ required: true, message: '请选择组件子类型' }]}
-            >
-              <Select 
-                value={componentSubtype} 
-                onChange={handleSubtypeChange}
-                placeholder="请选择组件子类型"
+              保存
+            </Button>
+          }
+        >
+          <Form.Item
+            name="name"
+            label="名称"
+            rules={[{ required: true, message: '请输入名称' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            label="描述"
+            rules={[{ required: true, message: '请输入描述' }]}
+          >
+            <TextArea rows={4} />
+          </Form.Item>
+          <Form.Item
+            name="english_description"
+            label="英文描述"
+            rules={[{ required: true, message: '请输入英文描述' }]}
+          >
+            <TextArea rows={4} />
+          </Form.Item>
+          <Form.Item
+            name="category"
+            label="分类"
+            rules={[{ required: true, message: '请选择分类' }]}
+          >
+            <Input />
+          </Form.Item>
+          
+          <Tabs defaultActiveKey="basic">
+            <TabPane tab="基本信息" key="basic">
+              <Form.Item
+                name="name"
+                label="组件名称"
+                rules={[{ required: true, message: '请输入组件名称' }]}
               >
-                <Option value="condition">条件组件</Option>
-                <Option value="executor">执行器组件</Option>
-              </Select>
-            </Form.Item>
+                <Input placeholder="请输入组件名称" />
+              </Form.Item>
 
-            <Card title="组件配置" bordered={false}>
-              {componentSubtype === 'condition' ? renderConditionConfig() : renderExecutorConfig()}
-            </Card>
-          </TabPane>
-        </Tabs>
+              <Form.Item
+                name="description"
+                label="中文描述"
+                rules={[{ required: true, message: '请输入中文描述' }]}
+              >
+                <TextArea placeholder="请输入中文描述" rows={2} />
+              </Form.Item>
+
+              <Form.Item
+                name="english_description"
+                label="英文描述"
+              >
+                <TextArea placeholder="请输入英文描述" rows={2} />
+              </Form.Item>
+
+              <Form.Item
+                name="category"
+                label="分类"
+              >
+                <Input placeholder="请输入分类" />
+              </Form.Item>
+            </TabPane>
+
+            <TabPane tab="组件配置" key="config">
+              <Form.Item
+                label="组件子类型"
+                rules={[{ required: true, message: '请选择组件子类型' }]}
+              >
+                <Select 
+                  value={componentSubtype} 
+                  onChange={handleSubtypeChange}
+                  placeholder="请选择组件子类型"
+                >
+                  <Option value="condition">条件组件</Option>
+                  <Option value="executor">执行器组件</Option>
+                </Select>
+              </Form.Item>
+
+              <Card title="组件配置" bordered={false}>
+                {componentSubtype === 'condition' ? renderConditionConfig() : renderExecutorConfig()}
+              </Card>
+            </TabPane>
+          </Tabs>
+        </Card>
       </Form>
     </div>
   );

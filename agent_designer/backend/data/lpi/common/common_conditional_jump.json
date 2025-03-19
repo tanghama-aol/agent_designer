@@ -1,9 +1,9 @@
 {
-  "id": "f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96",
-  "name": "条件跳转",
-  "description": "根据条件跳转到指定位置",
-  "english_description": "Conditional Jump",
+  "id": "98250208-0583-486a-8b30-7d28eee782bc",
+  "name": "无条件跳转",
+  "description": "无条件跳转",
+  "english_description": "Unconditional Jump",
   "type": "common",
-  "category": "控制流",
-  "filename": "common_conditional_jump"
+  "category": "通用LPI",
+  "filename": "common_unconditional_jump"
 } 

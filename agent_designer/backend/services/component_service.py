@@ -44,8 +44,8 @@ class ComponentService:
             # 构建组件树
             tree = [
                 {
-                    'title': '通用LPI',
-                    'key': 'general_lpi',
+            'title': '通用LPI',
+            'key': 'general_lpi',
                     'children': ComponentService._get_common_lpis()
                 },
                 {

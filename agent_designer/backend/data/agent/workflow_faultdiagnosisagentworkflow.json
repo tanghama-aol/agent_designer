@@ -19,7 +19,7 @@
           "id": "f6ad0e5c-7c63-4f3f-bd53-c5b47e0d5c96",
           "name": "判断结果：是，跳转3， 否，跳转5",
           "type": "lpi",
-          "filename": "common_conditional_jump"
+          "filename": "busi_3_5"
         },
         {
           "id": "4cb47b66-60be-49b6-942c-6c84b806f0d0",
@@ -31,7 +31,7 @@
           "id": "98250208-0583-486a-8b30-7d28eee782bc",
           "name": "跳转6",
           "type": "lpi",
-          "filename": "common_unconditional_jump"
+          "filename": "busi_6"
         },
         {
           "id": "9c2a8b2c-ebef-41eb-bf69-503a58c6fdfc",
@@ -73,7 +73,7 @@
           "id": "d481a830-96e6-489c-a237-587b57c89ca1",
           "name": "执行下一步业务恢复Agent，故障修复Agent",
           "type": "lpi",
-          "filename": "common_next_step"
+          "filename": "busi_execution_businessrecoveryagent_faultrepairagent"
         }
       ]
     },

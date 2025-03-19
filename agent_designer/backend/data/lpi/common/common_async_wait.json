@@ -1,9 +1,0 @@
-{
-  "id": "d2a50bdb-bfa5-4c77-9512-2efb9b1f8f0c",
-  "name": "异步等待",
-  "description": "异步等待特定事件或条件",
-  "english_description": "Async Wait",
-  "type": "common",
-  "category": "控制流",
-  "filename": "common_async_wait"
-} 

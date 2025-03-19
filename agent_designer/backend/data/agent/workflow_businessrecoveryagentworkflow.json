@@ -19,7 +19,7 @@
           "id": "ec7a9758-16b8-4477-8823-8268b47ca970",
           "name": "用户介入",
           "type": "lpi",
-          "filename": "common_user_intervention"
+          "filename": "busi_userintervention"
         }
       ]
     },
@@ -38,7 +38,7 @@
           "id": "ac971ada-1c8f-4cbf-865b-eb464522a677",
           "name": "用户介入",
           "type": "lpi",
-          "filename": "common_user_intervention"
+          "filename": "busi_userintervention"
         }
       ]
     },
@@ -63,7 +63,7 @@
           "id": "73143a23-f7b4-47ac-9154-7158ab400c1e",
           "name": "用户介入",
           "type": "lpi",
-          "filename": "common_user_intervention"
+          "filename": "busi_userintervention"
         },
         {
           "id": "69bc0b65-c3f0-41d7-a06d-1a05367d914e",

@@ -1,0 +1,9 @@
+{
+  "id": "339b5a79-cd0f-4e4b-8ddc-063093c05c09",
+  "name": "记忆故障",
+  "description": "记忆故障",
+  "english_description": "Memory Fault",
+  "type": "business",
+  "category": "故障总结Agent",
+  "filename": "busi_memory_fault"
+} 

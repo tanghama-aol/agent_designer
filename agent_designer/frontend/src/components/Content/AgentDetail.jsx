@@ -140,6 +140,19 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
+  useEffect(() => {
+    if (detail) {
+      form.setFieldsValue({
+        name: detail.name,
+        description: detail.description,
+        english_description: detail.english_description,
+        type: detail.type,
+        category: detail.category,
+        // 其他字段...
+      });
+    }
+  }, [detail, form]);
+
   // 初始化工作流数据
   useEffect(() => {
     if (detail?.workflows && detail.workflows.length > 0) {
@@ -233,19 +246,18 @@ const AgentDetail = ({ detail, onRefresh, onRefreshTree }) => {
       setLoading(true);
       
       const updateData = {
-        ...values,
-        input_params: inputParams,
-        output_params: outputParams,
-        examples: examples
+        ...detail, // 保留原有数据
+        ...values, // 更新表单数据
+        type: 'agent', // 确保类型正确
       };
       
       await updateAgent(detail.id, updateData);
       message.success('Agent组件保存成功');
-      onRefresh();
-      onRefreshTree();
+      if (onRefresh) onRefresh();
+      if (onRefreshTree) onRefreshTree();
     } catch (error) {
       console.error('保存失败:', error);
-      message.error('保存失败');
+      message.error('保存失败: ' + (error.message || '未知错误'));
     } finally {
       setLoading(false);
     }

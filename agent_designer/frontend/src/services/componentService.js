@@ -9,8 +9,8 @@ export const getComponentTree = async () => {
 };
 
 // 获取组件详情
-export const getComponentDetail = async (componentId) => {
-  const response = await axios.get(`${API_BASE_URL}/components/${componentId}`);
+export const getComponentDetail = async (componentType, componentId) => {
+  const response = await axios.get(`${API_BASE_URL}/components/${componentType}/${componentId}`);
   return response.data;
 };
 

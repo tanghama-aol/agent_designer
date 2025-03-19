@@ -1,9 +1,0 @@
-{
-  "id": "9b7d4513-da6f-43e5-a9d7-2f8c70be49a5",
-  "name": "记忆修改",
-  "description": "修改系统记忆中的数据",
-  "english_description": "Memory Modification",
-  "type": "common",
-  "category": "记忆操作",
-  "filename": "common_memory_modify"
-} 

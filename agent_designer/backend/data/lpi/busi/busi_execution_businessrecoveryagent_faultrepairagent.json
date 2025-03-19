@@ -1,0 +1,9 @@
+{
+  "id": "d481a830-96e6-489c-a237-587b57c89ca1",
+  "name": "执行下一步业务恢复Agent，故障修复Agent",
+  "description": "执行下一步业务恢复Agent，故障修复Agent",
+  "english_description": "执行下一步业务恢复Agent，故障修复Agent",
+  "type": "business",
+  "category": "故障诊断Agent",
+  "filename": "busi_execution_businessrecoveryagent_faultrepairagent"
+}
